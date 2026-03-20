@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataAI · Excel 智能分析工具</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+SC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f3ed;
+  --dark: #0e0e0e;
+  --red: #e8320a;
+  --yellow: #f5c800;
+  --white: #ffffff;
+  --muted: #8a8070;
+  --border: #d8d0c4;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--dark);
+  font-family: 'Noto Sans SC', sans-serif;
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: var(--bg);
+  border-bottom: 2px solid var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 60px;
+}
+
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  letter-spacing: 0.08em;
+  color: var(--dark);
+}
+
+.nav-logo span { color: var(--red); }
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.15s;
+}
+
+.nav-links a:hover { color: var(--dark); }
+
+.nav-cta {
+  background: var(--dark);
+  color: var(--bg) !important;
+  padding: 8px 20px;
+  font-weight: 500 !important;
+}
+
+.nav-cta:hover { background: var(--red); color: var(--white) !important; }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 100px 40px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg-text {
+  position: absolute;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28vw;
+  color: rgba(0,0,0,0.04);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  pointer-events: none;
+  letter-spacing: -0.02em;
+}
+
+.hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--red);
+  border: 1.5px solid var(--red);
+  padding: 5px 14px;
+  margin-bottom: 24px;
+  animation: slideIn 0.6s ease both;
+}
+
+.hero-tag::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--red);
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(56px, 7vw, 96px);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  margin-bottom: 24px;
+  animation: slideIn 0.6s 0.1s ease both;
+}
+
+.hero h1 .line2 {
+  color: var(--red);
+  display: block;
+}
+
+.hero h1 .line3 {
+  color: var(--dark);
+  display: block;
+  -webkit-text-stroke: 2px var(--dark);
+  color: transparent;
+}
+
+.hero-desc {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 36px;
+  animation: slideIn 0.6s 0.2s ease both;
+}
+
+.hero-btns {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  animation: slideIn 0.6s 0.3s ease both;
+}
+
+.btn {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 14px 32px;
+  border: 2px solid var(--dark);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s;
+}
+
+.btn-primary {
+  background: var(--dark);
+  color: var(--bg);
+}
+
+.btn-primary:hover {
+  background: var(--red);
+  border-color: var(--red);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--dark);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--dark);
+}
+
+.btn-outline:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--dark);
+}
+
+.hero-visual {
+  animation: slideIn 0.6s 0.4s ease both;
+}
+
+.mock-tool {
+  background: var(--dark);
+  border: 2px solid var(--dark);
+  overflow: hidden;
+  box-shadow: 8px 8px 0 var(--red);
+}
+
+.mock-bar {
+  background: #1a1a1a;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.mock-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+
+.mock-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #555;
+  margin-left: 8px;
+}
+
+.mock-content {
+  padding: 24px;
+}
+
+.mock-upload {
+  border: 1.5px dashed #333;
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.mock-upload-icon { font-size: 28px; margin-bottom: 8px; }
+
+.mock-upload p {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #555;
+}
+
+.mock-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.mock-stat {
+  background: #1a1a1a;
+  padding: 12px;
+  text-align: center;
+}
+
+.mock-stat-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  color: #00ff88;
+}
+
+.mock-stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: #444;
+}
+
+.mock-result {
+  background: #1a1a1a;
+  border-left: 3px solid #0088ff;
+  padding: 14px;
+}
+
+.mock-result p {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #aaa;
+  line-height: 1.7;
+}
+
+.mock-result p strong { color: #00ff88; }
+
+/* MARQUEE */
+.marquee-wrap {
+  overflow: hidden;
+  background: var(--dark);
+  border-top: 2px solid var(--dark);
+  border-bottom: 2px solid var(--dark);
+  padding: 14px 0;
+}
+
+.marquee-track {
+  display: flex;
+  gap: 60px;
+  animation: marquee 20s linear infinite;
+  white-space: nowrap;
+}
+
+.marquee-item {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.1em;
+  color: var(--bg);
+  flex-shrink: 0;
+}
+
+.marquee-item span { color: var(--red); }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* SECTIONS */
+section { padding: 80px 40px; }
+
+.section-inner { max-width: 1100px; margin: 0 auto; }
+
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--red);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(36px, 5vw, 60px);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.section-sub {
+  font-size: 15px;
+  color: #555;
+  line-height: 1.7;
+  max-width: 560px;
+}
+
+/* HOW IT WORKS */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 48px;
+  border: 2px solid var(--dark);
+}
+
+.step {
+  padding: 36px 28px;
+  border-right: 2px solid var(--dark);
+  position: relative;
+  background: var(--white);
+  transition: background 0.2s;
+}
+
+.step:last-child { border-right: none; }
+.step:hover { background: var(--yellow); }
+
+.step-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 72px;
+  line-height: 1;
+  color: rgba(0,0,0,0.08);
+  position: absolute;
+  top: 16px; right: 20px;
+}
+
+.step-icon { font-size: 36px; margin-bottom: 16px; }
+
+.step h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.step p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.7;
+}
+
+/* FEATURES */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  margin-top: 48px;
+  border: 2px solid var(--dark);
+}
+
+.feature {
+  padding: 32px;
+  background: var(--white);
+  border-right: 2px solid var(--dark);
+  border-bottom: 2px solid var(--dark);
+  transition: all 0.2s;
+}
+
+.feature:nth-child(2n) { border-right: none; }
+.feature:nth-last-child(-n+2) { border-bottom: none; }
+.feature:hover { background: var(--dark); color: var(--bg); }
+.feature:hover p { color: #aaa; }
+
+.feature-icon { font-size: 32px; margin-bottom: 16px; }
+
+.feature h3 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.feature p { font-size: 13px; color: #666; line-height: 1.7; }
+
+/* PRICING */
+#pricing { background: var(--dark); }
+
+#pricing .section-label { color: var(--yellow); }
+#pricing .section-title { color: var(--bg); }
+#pricing .section-sub { color: #666; }
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 48px;
+  border: 2px solid #333;
+}
+
+.price-card {
+  padding: 36px 28px;
+  background: #111;
+  border-right: 2px solid #333;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.price-card:last-child { border-right: none; }
+
+.price-card.featured {
+  background: var(--red);
+}
+
+.price-card:not(.featured):hover { background: #1a1a1a; }
+
+.price-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #555;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+
+.price-card.featured .price-label { color: rgba(255,255,255,0.7); }
+
+.price-amount {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 56px;
+  line-height: 1;
+  color: var(--bg);
+  margin-bottom: 4px;
+}
+
+.price-unit {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 24px;
+}
+
+.price-card.featured .price-unit { color: rgba(255,255,255,0.6); }
+
+.price-features {
+  list-style: none;
+  margin-bottom: 32px;
+}
+
+.price-features li {
+  font-size: 13px;
+  color: #888;
+  padding: 6px 0;
+  border-bottom: 1px solid #222;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.price-card.featured .price-features li {
+  color: rgba(255,255,255,0.85);
+  border-bottom-color: rgba(255,255,255,0.15);
+}
+
+.price-features li::before {
+  content: '✓';
+  color: var(--yellow);
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.price-card.featured .price-features li::before { color: #fff; }
+
+.btn-price {
+  width: 100%;
+  justify-content: center;
+  font-size: 13px;
+  padding: 12px;
+}
+
+.price-card:not(.featured) .btn-price {
+  border-color: #333;
+  color: var(--bg);
+  background: transparent;
+}
+
+.price-card:not(.featured) .btn-price:hover {
+  background: var(--bg);
+  color: var(--dark);
+  box-shadow: none;
+  transform: none;
+}
+
+.price-card.featured .btn-price {
+  background: var(--dark);
+  color: var(--bg);
+  border-color: var(--dark);
+}
+
+/* TESTIMONIALS */
+.testimonials {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.testi {
+  background: var(--white);
+  border: 2px solid var(--dark);
+  padding: 28px;
+  position: relative;
+}
+
+.testi::before {
+  content: '"';
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 80px;
+  color: var(--red);
+  line-height: 0.8;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.testi p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.testi-author {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.testi-author strong {
+  color: var(--dark);
+  font-weight: 700;
+  display: block;
+  margin-bottom: 2px;
+}
+
+/* CTA */
+#cta {
+  background: var(--red);
+  text-align: center;
+}
+
+#cta .section-title { color: var(--white); }
+#cta .section-sub { color: rgba(255,255,255,0.75); margin: 0 auto 36px; }
+
+.cta-btns {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+#cta .btn-primary {
+  background: var(--white);
+  color: var(--red);
+  border-color: var(--white);
+}
+
+#cta .btn-primary:hover {
+  background: var(--dark);
+  color: var(--white);
+  border-color: var(--dark);
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
+}
+
+#cta .btn-outline {
+  border-color: rgba(255,255,255,0.5);
+  color: var(--white);
+}
+
+#cta .btn-outline:hover {
+  border-color: var(--white);
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+}
+
+/* CONTACT */
+#contact { background: var(--dark); }
+#contact .section-title { color: var(--bg); }
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  margin-top: 48px;
+  align-items: start;
+}
+
+.contact-info p {
+  font-size: 15px;
+  color: #666;
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+
+.contact-channels {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.channel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border: 1px solid #222;
+  background: #111;
+  transition: border-color 0.15s;
+}
+
+.channel:hover { border-color: #444; }
+
+.channel-icon { font-size: 20px; }
+
+.channel-info { flex: 1; }
+
+.channel-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #444;
+  letter-spacing: 0.06em;
+}
+
+.channel-val {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--bg);
+  margin-top: 2px;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #444;
+  letter-spacing: 0.06em;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  background: #111;
+  border: 1px solid #222;
+  color: var(--bg);
+  padding: 12px 16px;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s;
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus { border-color: var(--red); }
+
+.form-group select option { background: #111; }
+
+.submit-btn {
+  background: var(--red);
+  color: var(--white);
+  border: 2px solid var(--red);
+  padding: 14px;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.05em;
+}
+
+.submit-btn:hover {
+  background: transparent;
+  color: var(--red);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--red);
+}
+
+/* FOOTER */
+footer {
+  background: #070707;
+  border-top: 2px solid #1a1a1a;
+  padding: 24px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  color: #333;
+  letter-spacing: 0.08em;
+}
+
+.footer-logo span { color: var(--red); }
+
+.footer-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #333;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+
+  .hero { padding: 80px 20px 40px; }
+  .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+
+  section { padding: 60px 20px; }
+
+  .steps { grid-template-columns: 1fr; }
+  .step { border-right: none; border-bottom: 2px solid var(--dark); }
+  .step:last-child { border-bottom: none; }
+
+  .features-grid { grid-template-columns: 1fr; }
+  .feature { border-right: none; border-bottom: 2px solid var(--dark) !important; }
+
+  .pricing-grid { grid-template-columns: 1fr; }
+  .price-card { border-right: none; border-bottom: 2px solid #333; }
+
+  .testimonials { grid-template-columns: 1fr; }
+
+  .contact-grid { grid-template-columns: 1fr; }
+
+  footer { flex-direction: column; gap: 12px; text-align: center; }
+}
+
+/* SCROLL ANIMATIONS */
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">DATA<span>·AI</span></div>
+  <ul class="nav-links">
+    <li><a href="#how">使用方式</a></li>
+    <li><a href="#features">功能</a></li>
+    <li><a href="#pricing">价格</a></li>
+    <li><a href="#contact" class="nav-cta">立即咨询</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-text">DATA</div>
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="hero-tag">AI 驱动 · 即上即用</div>
+      <h1>
+        Excel 数据
+        <span class="line2">30秒</span>
+        <span class="line3">分析完毕</span>
+      </h1>
+      <p class="hero-desc">
+        上传你的 Excel 文件，AI 自动识别数据规律、生成专业分析报告。<br>
+        不需要学编程，不需要懂统计，点一个按钮搞定。
+      </p>
+      <div class="hero-btns">
+        <a href="#contact" class="btn btn-primary">→ 免费试用一次</a>
+        <a href="#how" class="btn btn-outline">了解更多</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="mock-tool">
+        <div class="mock-bar">
+          <div class="mock-dot" style="background:#ff5f57"></div>
+          <div class="mock-dot" style="background:#febc2e"></div>
+          <div class="mock-dot" style="background:#28c840"></div>
+          <span class="mock-title">data-ai-analyzer.app</span>
+        </div>
+        <div class="mock-content">
+          <div class="mock-upload">
+            <div class="mock-upload-icon">📊</div>
+            <p>sales_data_2024.xlsx · 已上传</p>
+          </div>
+          <div class="mock-stats">
+            <div class="mock-stat">
+              <div class="mock-stat-val">3,241</div>
+              <div class="mock-stat-label">rows</div>
+            </div>
+            <div class="mock-stat">
+              <div class="mock-stat-val">12</div>
+              <div class="mock-stat-label">columns</div>
+            </div>
+            <div class="mock-stat">
+              <div class="mock-stat-val">27s</div>
+              <div class="mock-stat-label">analyzed</div>
+            </div>
+          </div>
+          <div class="mock-result">
+            <p><strong>关键发现：</strong><br>
+            → 第三季度销售额环比增长 23%<br>
+            → 华南区异常数据需关注<br>
+            → 产品 B 利润率最高（38%）</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">上传 Excel <span>·</span></span>
+    <span class="marquee-item">AI 自动分析 <span>·</span></span>
+    <span class="marquee-item">30 秒出报告 <span>·</span></span>
+    <span class="marquee-item">无需编程 <span>·</span></span>
+    <span class="marquee-item">专业级洞察 <span>·</span></span>
+    <span class="marquee-item">支持 CSV / XLS / XLSX <span>·</span></span>
+    <span class="marquee-item">上传 Excel <span>·</span></span>
+    <span class="marquee-item">AI 自动分析 <span>·</span></span>
+    <span class="marquee-item">30 秒出报告 <span>·</span></span>
+    <span class="marquee-item">无需编程 <span>·</span></span>
+    <span class="marquee-item">专业级洞察 <span>·</span></span>
+    <span class="marquee-item">支持 CSV / XLS / XLSX <span>·</span></span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-inner">
+    <div class="section-label fade-up">// HOW IT WORKS</div>
+    <div class="section-title fade-up">三步搞定</div>
+    <p class="section-sub fade-up">不需要任何技术背景，任何人都能用。</p>
+    <div class="steps fade-up">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-icon">📁</div>
+        <h3>上传文件</h3>
+        <p>拖拽或点击上传你的 Excel、CSV 文件，支持任意格式的表格数据。</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-icon">🤖</div>
+        <h3>AI 自动分析</h3>
+        <p>Claude AI 读取你的数据，识别规律、异常、趋势，生成深度洞察。</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-icon">📋</div>
+        <h3>获取报告</h3>
+        <p>专业分析报告即时生成，直接可用于汇报、决策或进一步分析。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" style="background: #ede8e0;">
+  <div class="section-inner">
+    <div class="section-label fade-up">// FEATURES</div>
+    <div class="section-title fade-up">核心功能</div>
+    <p class="section-sub fade-up">不只是读数据，是真正理解你的业务。</p>
+    <div class="features-grid fade-up">
+      <div class="feature">
+        <div class="feature-icon">📊</div>
+        <h3>智能数据识别</h3>
+        <p>自动识别数值、日期、文本等字段类型，无需手动配置，直接分析。</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔍</div>
+        <h3>异常检测</h3>
+        <p>AI 自动标记异常数据点，找出你可能忽视的问题和风险。</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📈</div>
+        <h3>趋势分析</h3>
+        <p>识别数据中的增长、下降、周期性规律，生成可操作的建议。</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">💬</div>
+        <h3>自然语言报告</h3>
+        <p>分析结果以清晰的中文呈现，让非技术人员也能理解数据背后的故事。</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <h3>极速交付</h3>
+        <p>30 秒内完成分析，告别等待，告别加班整理数据报告。</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔒</div>
+        <h3>数据安全</h3>
+        <p>数据本地处理，不上传到第三方服务器，保障你的业务数据安全。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-inner">
+    <div class="section-label fade-up">// PRICING</div>
+    <div class="section-title fade-up">透明定价</div>
+    <p class="section-sub fade-up">按需付费，无隐藏费用。</p>
+    <div class="pricing-grid fade-up">
+      <div class="price-card">
+        <div class="price-label">STARTER · 单次</div>
+        <div class="price-amount">RM49</div>
+        <div class="price-unit">/ 次</div>
+        <ul class="price-features">
+          <li>1 个 Excel 文件分析</li>
+          <li>AI 深度分析报告</li>
+          <li>30 分钟内交付</li>
+          <li>微信在线支持</li>
+        </ul>
+        <a href="#contact" class="btn btn-price btn-outline">立即下单</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-label">PRO · 月包 🔥 最受欢迎</div>
+        <div class="price-amount">RM129</div>
+        <div class="price-unit">/ 月 · 含 4 次分析</div>
+        <ul class="price-features">
+          <li>每月 4 次文件分析</li>
+          <li>优先响应（1小时内）</li>
+          <li>报告定制格式</li>
+          <li>数据对比分析</li>
+          <li>专属微信群支持</li>
+        </ul>
+        <a href="#contact" class="btn btn-price btn-primary">立即订阅</a>
+      </div>
+      <div class="price-card">
+        <div class="price-label">ENTERPRISE · 企业定制</div>
+        <div class="price-amount">RM399</div>
+        <div class="price-unit">起 · 按需定制</div>
+        <ul class="price-features">
+          <li>不限次数分析</li>
+          <li>自动化工作流搭建</li>
+          <li>API 对接服务</li>
+          <li>定制分析模板</li>
+          <li>专属客户经理</li>
+        </ul>
+        <a href="#contact" class="btn btn-price btn-outline">联系咨询</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="section-inner">
+    <div class="section-label fade-up">// TESTIMONIALS</div>
+    <div class="section-title fade-up">客户反馈</div>
+    <div class="testimonials fade-up">
+      <div class="testi">
+        <p>以前每周做销售报告要花我半天，现在上传文件，AI 直接给我关键数字，领导看了很满意。</p>
+        <div class="testi-author">
+          <strong>张经理</strong>
+          某电商公司运营总监
+        </div>
+      </div>
+      <div class="testi">
+        <p>我不懂数据分析，但这个工具让我第一次真正"看懂"了自己公司的财务数据，找到了几个之前完全没注意的问题。</p>
+        <div class="testi-author">
+          <strong>李总</strong>
+          小型贸易公司老板
+        </div>
+      </div>
+      <div class="testi">
+        <p>速度真的很快，报告也很专业。我拿去给投资人看，对方以为我们有专业数据团队。</p>
+        <div class="testi-author">
+          <strong>王创始人</strong>
+          初创公司联合创始人
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="section-inner">
+    <div class="section-title fade-up">现在就开始<br>免费试用一次</div>
+    <p class="section-sub fade-up">发送你的 Excel 文件，我用 AI 帮你分析，30 分钟内交付报告。第一次免费。</p>
+    <div class="cta-btns fade-up">
+      <a href="#contact" class="btn btn-primary">→ 免费获取分析报告</a>
+      <a href="https://wa.me/" class="btn btn-outline">WhatsApp 联系</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-label fade-up" style="color: var(--red)">// CONTACT</div>
+    <div class="section-title fade-up">联系我</div>
+    <div class="contact-grid fade-up">
+      <div class="contact-info">
+        <p>发送你的文件和需求，我会在 30 分钟内回复并给出报价。第一次分析完全免费，无需承诺。</p>
+        <div class="contact-channels">
+          <div class="channel">
+            <span class="channel-icon">💬</span>
+            <div class="channel-info">
+              <div class="channel-name">微信</div>
+              <div class="channel-val">your_wechat_id</div>
+            </div>
+          </div>
+          <div class="channel">
+            <span class="channel-icon">📘</span>
+            <div class="channel-info">
+              <div class="channel-name">Facebook</div>
+              <div class="channel-val">facebook.com/yourpage</div>
+            </div>
+          </div>
+          <div class="channel">
+            <span class="channel-icon">🎵</span>
+            <div class="channel-info">
+              <div class="channel-name">TikTok</div>
+              <div class="channel-val">@yourtiktok</div>
+            </div>
+          </div>
+          <div class="channel">
+            <span class="channel-icon">📧</span>
+            <div class="channel-info">
+              <div class="channel-name">Email</div>
+              <div class="channel-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a7dec8d2d5e7c2cac6cecb89c4c8ca">[email&#160;protected]</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form">
+        <div class="form-group">
+          <label>YOUR NAME · 你的名字</label>
+          <input type="text" placeholder="请输入你的名字">
+        </div>
+        <div class="form-group">
+          <label>CONTACT · 联系方式</label>
+          <input type="text" placeholder="微信 / 手机 / 邮箱">
+        </div>
+        <div class="form-group">
+          <label>SERVICE · 需要的服务</label>
+          <select>
+            <option>单次分析 · RM49</option>
+            <option>月包订阅 · RM129/月</option>
+            <option>企业定制 · RM399起</option>
+            <option>免费试用一次</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>MESSAGE · 需求描述</label>
+          <textarea rows="4" placeholder="简单描述你的数据和分析需求..."></textarea>
+        </div>
+        <button class="submit-btn" onclick="handleSubmit()">发送需求 →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">DATA<span>·AI</span></div>
+  <div class="footer-text">© 2025 DataAI · Excel 智能分析服务</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// Scroll animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Form submit
+function handleSubmit() {
+  const btn = document.querySelector('.submit-btn');
+  btn.textContent = '✓ 已发送，我会尽快联系你';
+  btn.style.ba
