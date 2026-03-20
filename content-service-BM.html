@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perkhidmatan Penulisan Konten AI · LiNg Creative</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf8f5;
+  --dark: #1a1a1a;
+  --gold: #c9a84c;
+  --gold2: #e8c97a;
+  --cream: #f0ebe0;
+  --muted: #888;
+  --border: #e0d8cc;
+  --white: #ffffff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--dark); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(250,248,245,0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 64px;
+}
+.nav-logo { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; }
+.nav-logo span { color: var(--gold); }
+.nav-cta {
+  background: var(--dark); color: var(--bg);
+  font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 13px;
+  padding: 10px 24px; border: none; cursor: pointer; transition: all 0.2s;
+  text-decoration: none; display: inline-block;
+}
+.nav-cta:hover { background: var(--gold); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 100px 80px 60px;
+  gap: 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: 'CONTENT';
+  position: absolute;
+  font-family: 'Playfair Display', serif;
+  font-size: 20vw; font-weight: 900;
+  color: rgba(201,168,76,0.05);
+  right: -5vw; top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.hero-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--gold);
+  letter-spacing: 0.15em; text-transform: uppercase;
+  border-bottom: 1px solid var(--gold);
+  padding-bottom: 8px; margin-bottom: 24px;
+  display: inline-block;
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(40px, 5vw, 68px);
+  line-height: 1.1; font-weight: 900;
+  margin-bottom: 24px;
+}
+
+.hero h1 em { font-style: italic; color: var(--gold); }
+
+.hero-desc {
+  font-size: 16px; color: #555; line-height: 1.8;
+  margin-bottom: 40px; max-width: 480px;
+}
+
+.hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+
+.btn {
+  font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 14px;
+  padding: 14px 32px; border: 2px solid var(--dark);
+  cursor: pointer; text-decoration: none; display: inline-flex;
+  align-items: center; gap: 8px; transition: all 0.2s;
+}
+.btn-dark { background: var(--dark); color: var(--bg); }
+.btn-dark:hover { background: var(--gold); border-color: var(--gold); }
+.btn-outline { background: transparent; color: var(--dark); }
+.btn-outline:hover { background: var(--dark); color: var(--bg); }
+
+.hero-right {
+  display: flex; flex-direction: column; gap: 16px;
+}
+
+.stat-row {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 16px; margin-bottom: 8px;
+}
+
+.stat {
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 20px 16px; text-align: center;
+}
+
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px; font-weight: 900;
+  color: var(--gold); line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--muted); letter-spacing: 0.05em;
+}
+
+.sample-card {
+  background: var(--dark);
+  padding: 24px; position: relative;
+  overflow: hidden;
+}
+
+.sample-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 4px; height: 100%;
+  background: var(--gold);
+}
+
+.sample-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--gold);
+  letter-spacing: 0.1em; margin-bottom: 12px;
+}
+
+.sample-text {
+  font-size: 13px; color: #ccc; line-height: 1.8;
+}
+
+.sample-text strong { color: var(--gold2); }
+
+/* SERVICES */
+section { padding: 80px 80px; }
+
+.section-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--gold);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 900; line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.section-sub { font-size: 15px; color: #666; line-height: 1.7; max-width: 560px; }
+
+.services-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 48px;
+}
+
+.service {
+  background: var(--white); padding: 36px 28px;
+  transition: all 0.2s; position: relative;
+  overflow: hidden;
+}
+
+.service::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0;
+  width: 0; height: 3px; background: var(--gold);
+  transition: width 0.3s;
+}
+
+.service:hover { background: var(--cream); }
+.service:hover::after { width: 100%; }
+
+.service-icon { font-size: 36px; margin-bottom: 20px; }
+.service h3 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+.service p { font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 20px; }
+
+.service-price {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; color: var(--gold); font-weight: 500;
+}
+
+/* PRICING */
+#pricing { background: var(--dark); }
+#pricing .section-tag { color: var(--gold); }
+#pricing .section-title { color: var(--bg); }
+#pricing .section-sub { color: #666; }
+
+.pricing-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: #333;
+  border: 1px solid #333;
+  margin-top: 48px;
+}
+
+.price-card {
+  background: #111; padding: 32px 24px;
+  transition: background 0.2s;
+}
+
+.price-card.featured { background: var(--gold); }
+.price-card:not(.featured):hover { background: #1a1a1a; }
+
+.price-type {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: #555; margin-bottom: 20px;
+}
+.price-card.featured .price-type { color: rgba(0,0,0,0.5); }
+
+.price-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 700;
+  color: var(--bg); margin-bottom: 8px;
+}
+.price-card.featured .price-name { color: var(--dark); }
+
+.price-amount {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px; font-weight: 900;
+  color: var(--gold); line-height: 1; margin-bottom: 4px;
+}
+.price-card.featured .price-amount { color: var(--dark); }
+
+.price-unit {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: #555; margin-bottom: 28px;
+}
+.price-card.featured .price-unit { color: rgba(0,0,0,0.5); }
+
+.price-list { list-style: none; margin-bottom: 28px; }
+.price-list li {
+  font-size: 13px; color: #777; padding: 6px 0;
+  border-bottom: 1px solid #1e1e1e;
+  display: flex; align-items: center; gap: 8px;
+}
+.price-card.featured .price-list li { color: rgba(0,0,0,0.7); border-bottom-color: rgba(0,0,0,0.1); }
+.price-list li::before { content: '✓'; color: var(--gold); font-size: 12px; }
+.price-card.featured .price-list li::before { color: var(--dark); }
+
+.price-btn {
+  width: 100%; padding: 12px;
+  font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 13px;
+  cursor: pointer; border: none; transition: all 0.2s; text-align: center;
+  display: block; text-decoration: none;
+}
+.price-card:not(.featured) .price-btn { background: transparent; color: var(--bg); border: 1px solid #333; }
+.price-card:not(.featured) .price-btn:hover { background: var(--gold); border-color: var(--gold); color: var(--dark); }
+.price-card.featured .price-btn { background: var(--dark); color: var(--bg); }
+.price-card.featured .price-btn:hover { background: #000; }
+
+/* SAMPLES */
+#samples { background: var(--cream); }
+
+.samples-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 24px; margin-top: 48px;
+}
+
+.sample {
+  background: var(--white);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.sample-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.sample-platform {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.sample-platform.fb { color: #1877f2; }
+.sample-platform.tt { color: #ff0050; }
+.sample-platform.ig { color: #e1306c; }
+.sample-platform.wa { color: #25d366; }
+
+.sample-body {
+  padding: 20px; font-size: 13px;
+  line-height: 1.9; color: #444;
+  white-space: pre-wrap;
+}
+
+/* PROCESS */
+.process-steps {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0; margin-top: 48px;
+  border: 1px solid var(--border);
+}
+
+.process-step {
+  padding: 32px 24px;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+.process-step:last-child { border-right: none; }
+
+.step-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 64px; font-weight: 900;
+  color: rgba(201,168,76,0.15);
+  line-height: 1; margin-bottom: 16px;
+}
+
+.step-title { font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+.step-desc { font-size: 13px; color: #777; line-height: 1.7; }
+
+/* CTA */
+#cta {
+  background: var(--gold);
+  text-align: center; padding: 80px 40px;
+}
+
+#cta .section-title { color: var(--dark); }
+#cta p { color: rgba(0,0,0,0.6); font-size: 16px; margin: 16px auto 36px; max-width: 500px; }
+
+.cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+#cta .btn-dark { background: var(--dark); color: var(--bg); border-color: var(--dark); }
+#cta .btn-dark:hover { background: #000; }
+#cta .btn-outline { border-color: var(--dark); color: var(--dark); }
+#cta .btn-outline:hover { background: var(--dark); color: var(--bg); }
+
+/* FOOTER */
+footer {
+  background: var(--dark); padding: 28px 80px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-logo { font-family: 'Playfair Display', serif; font-size: 18px; color: #444; }
+.footer-logo span { color: var(--gold); }
+.footer-text { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #444; }
+
+/* ANIMATIONS */
+.fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s, transform 0.6s; }
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  nav { padding: 0 20px; }
+  .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; gap: 40px; }
+  section { padding: 60px 24px; }
+  .services-grid { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr 1fr; }
+  .samples-grid { grid-template-columns: 1fr; }
+  .process-steps { grid-template-columns: 1fr 1fr; }
+  footer { padding: 24px; flex-direction: column; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">LiNg <span>Creative</span></div>
+  <a href="#cta" class="nav-cta">Hubungi Kami</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-copy">
+    <div class="hero-tag">AI-Powered Content · Malaysia</div>
+    <h1>Copywriting Profesional<br><em>Dihantar</em><br>Pantas</h1>
+    <p class="hero-desc">
+      Kandungan Facebook, TikTok, Instagram, WhatsApp —
+      Dikuasakan AI, siap dalam 10 minit, kualiti profesional, direka khas untuk pasaran Malaysia.
+    </p>
+    <div class="hero-btns">
+      <a href="#pricing" class="btn btn-dark">→ Lihat Harga</a>
+      <a href="https://wa.me/60197144999" class="btn btn-outline">Hubungi WhatsApp</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num">10'</div>
+        <div class="stat-label">Pantas时间</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">RM50</div>
+        <div class="stat-label">Harga Mula</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">4+</div>
+        <div class="stat-label">Platform</div>
+      </div>
+    </div>
+    <div class="sample-card">
+      <div class="sample-label">// CONTOH · Pos Facebook</div>
+      <div class="sample-text">
+😩 Masih ambil 2 jam nak tulis satu pos?<br><br>
+Biar <strong>AI buat untuk anda dalam 10 minit</strong>,<br>
+Copywriting Profesional、吸引眼球、马来西亚口吻。<br><br>
+💬 Komen "MAHU" untuk percubaan percuma 👇
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-tag fade-up">// PERKHIDMATAN</div>
+  <div class="section-title fade-up">Apa Yang Kami Tawarkan</div>
+  <p class="section-sub fade-up">Perkhidmatan kandungan berkuasa AI untuk PKS dan jenama peribadi Malaysia.</p>
+
+  <div class="services-grid fade-up">
+    <div class="service">
+      <div class="service-icon">📘</div>
+      <h3>Kandungan Facebook</h3>
+      <p>Pos promosi, kisah jenama, pos interaktif. Dioptimumkan untuk pasaran Malaysia, Bahasa Melayu atau Inggeris.</p>
+      <div class="service-price">RM50  / pos</div>
+    </div>
+    <div class="service">
+      <div class="service-icon">🎵</div>
+      <h3>Skrip TikTok</h3>
+      <p>Skrip video 30 saat/60 saat dengan hook, isi dan CTA. Disesuaikan dengan produk dan gaya anda.</p>
+      <div class="service-price">RM80  / video</div>
+    </div>
+    <div class="service">
+      <div class="service-icon">📸</div>
+      <h3>Kapsyen Instagram</h3>
+      <p>Pameran produk, gaya hidup, kisah jenama — lengkap dengan pakej hashtag.</p>
+      <div class="service-price">RM40  / pos</div>
+    </div>
+    <div class="service">
+      <div class="service-icon">💬</div>
+      <h3>Siaran WhatsApp</h3>
+      <p>Notis promosi, ucapan perayaan, susulan pelanggan. Ringkas dan berkesan.</p>
+      <div class="service-price">RM30  / video</div>
+    </div>
+    <div class="service">
+      <div class="service-icon">📧</div>
+      <h3>Pemasaran Emel</h3>
+      <p>Newsletter, emel pelancaran produk, promosi. Reka letak profesional untuk kadar penukaran lebih tinggi.</p>
+      <div class="service-price">RM100 mulai / 封</div>
+    </div>
+    <div class="service">
+      <div class="service-icon">📦</div>
+      <h3>Pakej Bulanan</h3>
+      <p>每月固定篇数，优先Pantas，专属优惠价。适合需要持续内容的品牌。</p>
+      <div class="service-price">RM299  / bulan</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section style="background: var(--cream);">
+  <div class="section-tag fade-up">// PROSES</div>
+  <div class="section-title fade-up">4 Langkah Mudah</div>
+  <div class="process-steps fade-up">
+    <div class="process-step">
+      <div class="step-num">01</div>
+      <div class="step-title">Hubungi via WhatsApp</div>
+      <div class="step-desc">Hantar maklumat produk/perkhidmatan, sasaran pelanggan dan gaya yang dikehendaki.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">02</div>
+      <div class="step-title">AI Jana Draf</div>
+      <div class="step-desc">Draf siap dalam 10 minit, direka khas untuk jenama dan pasaran Malaysia anda.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">03</div>
+      <div class="step-title">Semak & Sahkan</div>
+      <div class="step-desc">Satu pindaan percuma sehingga anda berpuas hati.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">04</div>
+      <div class="step-title">Pantas使用</div>
+      <div class="step-desc">Salin dan siarkan terus, atau gunakan bersama reka bentuk. Fail dihantar selepas bayaran.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SAMPLES -->
+<section id="samples">
+  <div class="section-tag fade-up">// CONTOH PENULISAN</div>
+  <div class="section-title fade-up">Contoh Kandungan</div>
+  <div class="samples-grid fade-up">
+    <div class="sample">
+      <div class="sample-header">
+        <span class="sample-platform fb">📘 Facebook · Promosi Restoran</span>
+      </div>
+      <div class="sample-body">🍜 Promosi Hujung Minggu! Beli 1 Percuma 1!
+
+Jom ke restoran kami hujung minggu ini, pesan mana-mana hidangan utama dan nikmati tawaran beli 1 percuma 1!
+
+📅 Sabtu & Ahad sahaja
+⏰ Makan tengah hari 11pg–3ptg
+📍 Petaling Jaya
+
+❤️ Like dan share dengan keluarga!
+📞 Tempahan: 019-7144999</div>
+    </div>
+    <div class="sample">
+      <div class="sample-header">
+        <span class="sample-platform tt">🎵 TikTok · Produk Kecantikan</span>
+      </div>
+      <div class="sample-body">【钩子 0-3秒】
+"为什么我的皮肤突然变好了？"
+
+【主体 3-20秒】
+用了这个精华液两周，毛孔小了、暗沉消失了。
+我来示范怎么用——早晚各一次，两滴就够了。
+
+【CTA 20-30秒】
+主页链接免费试用装，今天只剩 10 份！</div>
+    </div>
+    <div class="sample">
+      <div class="sample-header">
+        <span class="sample-platform wa">💬 WhatsApp · 促销广播</span>
+      </div>
+      <div class="sample-body">🎉 【限时48小时】闪购通知！
+
+亲爱的顾客，感谢您一直以来的支持！
+
+本周特别为您准备：
+✅ 全场 8 折
+✅ 满 RM100 免运费
+✅ 额外赠品（前50名）
+
+⏰ 优惠截止：明天晚上12点
+🛒 Pesan Sekarang回复"ORDER"</div>
+    </div>
+    <div class="sample">
+      <div class="sample-header">
+        <span class="sample-platform ig">📸 Instagram · Kisah Jenama</span>
+      </div>
+      <div class="sample-body">Bermula dari satu impian kecil ✨
+
+Tiga tahun lalu, saya hanyalah seorang biasa yang ingin membantu lebih ramai orang.
+
+Hari ini, kami telah membantu 500+ pelanggan menemui penyelesaian yang sesuai.
+
+Semua ini kerana kepercayaan anda.
+
+Terima kasih, mari kita teruskan perjalanan ini bersama 🙏
+
+#MalaysiaBusiness #JenameLokal #PetalingJaya</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-tag fade-up">// HARGA</div>
+  <div class="section-title fade-up">Harga Telus</div>
+  <p class="section-sub fade-up">Bayar mengikut keperluan, tiada caj tersembunyi.</p>
+  <div class="pricing-grid fade-up">
+    <div class="price-card">
+      <div class="price-type">STARTER</div>
+      <div class="price-name">Satu Pos</div>
+      <div class="price-amount">RM50</div>
+      <div class="price-unit">/ 篇mulai</div>
+      <ul class="price-list">
+        <li>Facebook / IG 帖子</li>
+        <li>Siaran WhatsApp</li>
+        <li>10分钟内Pantas</li>
+        <li>1 pindaan percuma</li>
+      </ul>
+      <a href="https://wa.me/60197144999" class="price-btn">Tempah via WhatsApp</a>
+    </div>
+    <div class="price-card featured">
+      <div class="price-type">🔥 Paling Popular</div>
+      <div class="price-name">Pakej Mingguan</div>
+      <div class="price-amount">RM199</div>
+      <div class="price-unit">/ 周 · 5篇</div>
+      <ul class="price-list">
+        <li>5 kandungan setiap minggu</li>
+        <li>Pelbagai platform</li>
+        <li>优先Pantas</li>
+        <li>Pindaan tanpa had</li>
+      </ul>
+      <a href="https://wa.me/60197144999" class="price-btn">Pesan Sekarang</a>
+    </div>
+    <div class="price-card">
+      <div class="price-type">PRO</div>
+      <div class="price-name">Pakej Bulanan</div>
+      <div class="price-amount">RM599</div>
+      <div class="price-unit">/ 月 · 20篇</div>
+      <ul class="price-list">
+        <li>20 kandungan sebulan</li>
+        <li>Skrip TikTok包含</li>
+        <li>Perancangan kalendar kandungan</li>
+        <li>Perkhidmatan eksklusif</li>
+      </ul>
+      <a href="https://wa.me/60197144999" class="price-btn">Hubungi WhatsApp</a>
+    </div>
+    <div class="price-card">
+      <div class="price-type">ENTERPRISE</div>
+      <div class="price-name">Korporat</div>
+      <div class="price-amount">RM999</div>
+      <div class="price-unit"> / bulan</div>
+      <ul class="price-list">
+        <li>Kandungan tanpa had</li>
+        <li>Pengurusan pelbagai platform</li>
+        <li>Suara jenama disesuaikan</li>
+        <li>Laporan bulanan</li>
+      </ul>
+      <a href="https://wa.me/60197144999" class="price-btn">Hubungi Kami</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="section-title fade-up">免费获取一篇<br>试用文案</div>
+  <p class="fade-up">Hantar maklumat produk anda, kami tulis satu pos Facebook percuma. Bayar hanya jika berpuas hati.</p>
+  <div class="cta-btns fade-up">
+    <a href="https://wa.me/60197144999?text=Saya ingin mencuba penulisan percuma" class="btn btn-dark">→ Cuba Percuma via WhatsApp</a>
+    <a href="/cdn-cgi/l/email-protection#365b4f06070f010702020f0f0f76515b575f5a1855595b" class="btn btn-outline">Hubungi via Emel</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">LiNg <span>Creative</span></div>
+  <div class="footer-text">© 2025 · Perkhidmatan Penulisan Konten AI · Petaling Jaya, Malaysia</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.cl
