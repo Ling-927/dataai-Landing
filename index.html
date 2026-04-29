@@ -775,10 +775,284 @@ footer {
   color: #333;
 }
 
+/* HAMBURGER */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  z-index: 200;
+}
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--dark);
+  transition: all 0.25s;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 150;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+.mobile-nav-overlay.open { display: flex; }
+.mobile-nav-overlay a {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  color: var(--dark);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  transition: color 0.15s;
+}
+.mobile-nav-overlay a:hover { color: var(--red); }
+.mobile-nav-overlay .nav-cta {
+  background: var(--red);
+  color: var(--white) !important;
+  padding: 14px 40px;
+  font-size: 20px;
+}
+
+/* MOBILE BOTTOM BAR */
+.mobile-bottom-bar {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 120;
+  background: var(--dark);
+  border-top: 2px solid var(--dark);
+  display: none;
+  grid-template-columns: repeat(3, 1fr);
+}
+.mobile-bottom-bar button,
+.mobile-bottom-bar a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 8px;
+  background: none;
+  border: none;
+  border-right: 1px solid #222;
+  color: #aaa;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+.mobile-bottom-bar button:last-child,
+.mobile-bottom-bar a:last-child { border-right: none; }
+.mobile-bottom-bar .bar-icon { font-size: 20px; }
+.mobile-bottom-bar .bar-new { background: var(--red); color: var(--white); }
+.mobile-bottom-bar .bar-new:hover { background: #c0290a; }
+.mobile-bottom-bar button:not(.bar-new):hover,
+.mobile-bottom-bar a:not(.bar-new):hover { background: #1a1a1a; color: var(--bg); }
+
+/* MOBILE BOTTOM SHEET (shared) */
+.sheet-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 180;
+}
+.sheet-overlay.open { display: block; }
+
+.bottom-sheet {
+  position: fixed;
+  bottom: -100%;
+  left: 0; right: 0;
+  z-index: 190;
+  background: var(--bg);
+  border-top: 3px solid var(--dark);
+  border-radius: 0;
+  padding: 0 0 env(safe-area-inset-bottom, 16px);
+  transition: bottom 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.bottom-sheet.open { bottom: 0; }
+
+.sheet-handle {
+  width: 40px; height: 4px;
+  background: #ccc;
+  border-radius: 2px;
+  margin: 12px auto 0;
+}
+
+.sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 12px;
+  border-bottom: 2px solid var(--dark);
+}
+.sheet-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  letter-spacing: 0.06em;
+}
+.sheet-close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 4px 8px;
+}
+
+/* SESSION KICKOFF SHEET */
+.kickoff-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.kickoff-body label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  display: block;
+  margin-bottom: 4px;
+}
+.kickoff-body input,
+.kickoff-body textarea,
+.kickoff-body select {
+  width: 100%;
+  background: #fff;
+  border: 2px solid var(--dark);
+  color: var(--dark);
+  padding: 12px 14px;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 15px;
+  outline: none;
+  -webkit-appearance: none;
+}
+.kickoff-body textarea { resize: vertical; min-height: 80px; }
+.kickoff-body input:focus,
+.kickoff-body textarea:focus,
+.kickoff-body select:focus { border-color: var(--red); }
+
+.kickoff-actions { display: flex; flex-direction: column; gap: 10px; padding: 0 20px 20px; }
+.btn-whatsapp {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  background: #25D366; color: #fff;
+  border: 2px solid #25D366;
+  padding: 16px; font-size: 16px; font-weight: 700;
+  font-family: 'Noto Sans SC', sans-serif;
+  cursor: pointer; transition: all 0.15s;
+}
+.btn-whatsapp:hover { background: #1da851; border-color: #1da851; }
+.btn-save-only {
+  background: var(--dark); color: var(--bg);
+  border: 2px solid var(--dark);
+  padding: 14px; font-size: 14px; font-weight: 700;
+  font-family: 'Noto Sans SC', sans-serif;
+  cursor: pointer;
+}
+
+/* SESSIONS PANEL */
+.sessions-list { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 12px; }
+.session-card {
+  border: 2px solid var(--dark);
+  background: var(--white);
+  padding: 16px;
+}
+.session-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.session-card-desc {
+  font-size: 14px;
+  color: var(--dark);
+  font-weight: 600;
+  line-height: 1.4;
+  flex: 1;
+}
+.session-card-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.session-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border: 1.5px solid;
+  margin-bottom: 10px;
+}
+.status-pending { color: #f5a623; border-color: #f5a623; background: #fff8ee; }
+.status-processing { color: #0088ff; border-color: #0088ff; background: #eef5ff; }
+.status-done { color: #28a745; border-color: #28a745; background: #edfbf1; }
+
+.session-card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.session-card-actions button {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 5px 10px;
+  border: 1.5px solid var(--border);
+  background: none;
+  cursor: pointer;
+  color: var(--muted);
+  transition: all 0.15s;
+}
+.session-card-actions button:hover { border-color: var(--dark); color: var(--dark); }
+.session-card-actions .btn-done { border-color: #28a745; color: #28a745; }
+.session-card-actions .btn-done:hover { background: #28a745; color: #fff; }
+.session-card-actions .btn-del { border-color: #e8320a; color: #e8320a; }
+.session-card-actions .btn-del:hover { background: #e8320a; color: #fff; }
+
+.sessions-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 2;
+}
+.sessions-empty .empty-icon { font-size: 40px; display: block; margin-bottom: 12px; }
+
+.sessions-new-btn {
+  margin: 0 20px 20px;
+  width: calc(100% - 40px);
+  background: var(--red);
+  color: var(--white);
+  border: 2px solid var(--red);
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Noto Sans SC', sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   nav { padding: 0 20px; }
   .nav-links { display: none; }
+  .hamburger { display: flex; }
 
   .hero { padding: 80px 20px 40px; }
   .hero-inner { grid-template-columns: 1fr; gap: 40px; }
@@ -799,7 +1073,13 @@ footer {
 
   .contact-grid { grid-template-columns: 1fr; }
 
-  footer { flex-direction: column; gap: 12px; text-align: center; }
+  footer {
+    flex-direction: column; gap: 12px; text-align: center;
+    padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .mobile-bottom-bar { display: grid; }
+  body { padding-bottom: 70px; }
 }
 
 /* SCROLL ANIMATIONS */
@@ -826,7 +1106,18 @@ footer {
     <li><a href="#pricing">价格</a></li>
     <li><a href="#contact" class="nav-cta">立即咨询</a></li>
   </ul>
+  <button class="hamburger" id="hamburger" aria-label="菜单" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE NAV OVERLAY -->
+<div class="mobile-nav-overlay" id="mobileNavOverlay">
+  <a href="#how" onclick="closeMobileNav()">使用方式</a>
+  <a href="#features" onclick="closeMobileNav()">功能</a>
+  <a href="#pricing" onclick="closeMobileNav()">价格</a>
+  <a href="#contact" class="nav-cta" onclick="closeMobileNav()">立即咨询</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -1140,20 +1431,277 @@ footer {
   <div class="footer-text">© 2025 DataAI · Excel 智能分析服务</div>
 </footer>
 
+<!-- MOBILE BOTTOM BAR -->
+<div class="mobile-bottom-bar" id="mobileBottomBar">
+  <button class="bar-new" onclick="openKickoffSheet()">
+    <span class="bar-icon">📊</span>新分析
+  </button>
+  <button onclick="openSessionsSheet()">
+    <span class="bar-icon">📋</span>我的记录
+  </button>
+  <a href="https://wa.me/60197144999" class="bar-wa">
+    <span class="bar-icon">💬</span>WhatsApp
+  </a>
+</div>
+
+<!-- SHEET OVERLAY -->
+<div class="sheet-overlay" id="sheetOverlay" onclick="closeAllSheets()"></div>
+
+<!-- SESSION KICKOFF SHEET -->
+<div class="bottom-sheet" id="kickoffSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-header">
+    <span class="sheet-title">开始新分析</span>
+    <button class="sheet-close" onclick="closeAllSheets()">✕</button>
+  </div>
+  <div class="kickoff-body">
+    <div>
+      <label>YOUR NAME · 你的名字</label>
+      <input type="text" id="ks-name" placeholder="请输入你的名字">
+    </div>
+    <div>
+      <label>SERVICE · 分析类型</label>
+      <select id="ks-service">
+        <option value="单次分析 · RM49">单次分析 · RM49</option>
+        <option value="月包订阅 · RM129/月">月包订阅 · RM129/月</option>
+        <option value="企业定制 · RM399起">企业定制 · RM399起</option>
+        <option value="免费试用一次">免费试用一次</option>
+      </select>
+    </div>
+    <div>
+      <label>MESSAGE · 需求描述</label>
+      <textarea id="ks-msg" rows="3" placeholder="简单描述你的数据文件和分析需求..."></textarea>
+    </div>
+  </div>
+  <div class="kickoff-actions">
+    <button class="btn-whatsapp" onclick="kickOffViaWhatsApp()">
+      💬 WhatsApp 一键发送
+    </button>
+    <button class="btn-save-only" onclick="kickOffSaveOnly()">
+      📋 仅保存记录，稍后联系
+    </button>
+  </div>
+</div>
+
+<!-- MY SESSIONS SHEET -->
+<div class="bottom-sheet" id="sessionsSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-header">
+    <span class="sheet-title">我的分析记录</span>
+    <button class="sheet-close" onclick="closeAllSheets()">✕</button>
+  </div>
+  <div class="sessions-list" id="sessionsList"></div>
+  <button class="sessions-new-btn" onclick="switchToKickoff()">＋ 开始新的分析</button>
+</div>
+
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// Scroll animations
+// ── Scroll animations ──────────────────────────────────────────────────────
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
+    if (entry.isIntersecting) entry.target.classList.add('visible');
   });
 }, { threshold: 0.1 });
-
 document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-// Form submit
+// ── Contact form submit ────────────────────────────────────────────────────
 function handleSubmit() {
   const btn = document.querySelector('.submit-btn');
   btn.textContent = '✓ 已发送，我会尽快联系你';
-  btn.style.ba
+  btn.style.background = 'var(--yellow)';
+  btn.style.borderColor = 'var(--yellow)';
+  btn.style.color = 'var(--dark)';
+  btn.disabled = true;
+}
+
+// ── Mobile nav ─────────────────────────────────────────────────────────────
+function toggleMobileNav() {
+  const overlay = document.getElementById('mobileNavOverlay');
+  const ham = document.getElementById('hamburger');
+  const isOpen = overlay.classList.toggle('open');
+  ham.classList.toggle('open', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+
+function closeMobileNav() {
+  document.getElementById('mobileNavOverlay').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── Sheet helpers ──────────────────────────────────────────────────────────
+function openSheet(id) {
+  document.getElementById('sheetOverlay').classList.add('open');
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAllSheets() {
+  ['kickoffSheet', 'sessionsSheet'].forEach(id => {
+    document.getElementById(id).classList.remove('open');
+  });
+  document.getElementById('sheetOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function openKickoffSheet() {
+  closeAllSheets();
+  setTimeout(() => openSheet('kickoffSheet'), 10);
+}
+
+function openSessionsSheet() {
+  renderSessions();
+  closeAllSheets();
+  setTimeout(() => openSheet('sessionsSheet'), 10);
+}
+
+function switchToKickoff() {
+  closeAllSheets();
+  setTimeout(() => openSheet('kickoffSheet'), 350);
+}
+
+// ── Session storage ────────────────────────────────────────────────────────
+const SESSIONS_KEY = 'dataai_sessions';
+
+function getSessions() {
+  try { return JSON.parse(localStorage.getItem(SESSIONS_KEY)) || []; }
+  catch { return []; }
+}
+
+function saveSessions(sessions) {
+  localStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions));
+}
+
+function createSession(name, service, msg) {
+  return {
+    id: Date.now().toString(),
+    name: name || '匿名',
+    service,
+    msg,
+    status: 'pending',
+    createdAt: new Date().toISOString()
+  };
+}
+
+// ── Kickoff actions ────────────────────────────────────────────────────────
+function getKickoffFields() {
+  return {
+    name: document.getElementById('ks-name').value.trim(),
+    service: document.getElementById('ks-service').value,
+    msg: document.getElementById('ks-msg').value.trim()
+  };
+}
+
+function kickOffViaWhatsApp() {
+  const { name, service, msg } = getKickoffFields();
+  if (!msg) {
+    document.getElementById('ks-msg').focus();
+    document.getElementById('ks-msg').style.borderColor = 'var(--red)';
+    return;
+  }
+  const session = createSession(name, service, msg);
+  const sessions = getSessions();
+  sessions.unshift(session);
+  saveSessions(sessions);
+
+  const text = `你好！我想咨询 DataAI 分析服务。\n姓名：${session.name}\n服务：${service}\n需求：${msg}`;
+  window.open('https://wa.me/60197144999?text=' + encodeURIComponent(text), '_blank');
+  closeAllSheets();
+  clearKickoffForm();
+}
+
+function kickOffSaveOnly() {
+  const { name, service, msg } = getKickoffFields();
+  if (!msg) {
+    document.getElementById('ks-msg').focus();
+    document.getElementById('ks-msg').style.borderColor = 'var(--red)';
+    return;
+  }
+  const session = createSession(name, service, msg);
+  const sessions = getSessions();
+  sessions.unshift(session);
+  saveSessions(sessions);
+  closeAllSheets();
+  clearKickoffForm();
+  setTimeout(() => openSessionsSheet(), 400);
+}
+
+function clearKickoffForm() {
+  document.getElementById('ks-name').value = '';
+  document.getElementById('ks-msg').value = '';
+  document.getElementById('ks-msg').style.borderColor = '';
+  document.getElementById('ks-service').selectedIndex = 0;
+}
+
+// ── Session status management ──────────────────────────────────────────────
+const STATUS_LABELS = {
+  pending:    { label: '待处理',  cls: 'status-pending' },
+  processing: { label: '分析中',  cls: 'status-processing' },
+  done:       { label: '已完成',  cls: 'status-done' }
+};
+
+function updateSessionStatus(id, status) {
+  const sessions = getSessions().map(s => s.id === id ? { ...s, status } : s);
+  saveSessions(sessions);
+  renderSessions();
+}
+
+function deleteSession(id) {
+  saveSessions(getSessions().filter(s => s.id !== id));
+  renderSessions();
+}
+
+function formatTime(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' })
+    + ' ' + d.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+}
+
+function renderSessions() {
+  const list = document.getElementById('sessionsList');
+  const sessions = getSessions();
+  if (!sessions.length) {
+    list.innerHTML = `<div class="sessions-empty">
+      <span class="empty-icon">📭</span>
+      暂无分析记录<br>点击「新分析」开始你的第一次分析
+    </div>`;
+    return;
+  }
+  list.innerHTML = sessions.map(s => {
+    const { label, cls } = STATUS_LABELS[s.status] || STATUS_LABELS.pending;
+    const actionBtns = s.status === 'done' ? `
+      <button class="btn-del" onclick="deleteSession('${s.id}')">删除</button>
+    ` : `
+      ${s.status === 'pending' ? `<button onclick="updateSessionStatus('${s.id}','processing')">→ 标为分析中</button>` : ''}
+      ${s.status === 'processing' ? `<button class="btn-done" onclick="updateSessionStatus('${s.id}','done')">✓ 标为已完成</button>` : ''}
+      <button onclick="reopenWhatsApp('${s.id}')">💬 跟进</button>
+      <button class="btn-del" onclick="deleteSession('${s.id}')">删除</button>
+    `;
+    return `<div class="session-card">
+      <div class="session-card-top">
+        <div class="session-card-desc">${escHtml(s.service)}</div>
+        <div class="session-card-time">${formatTime(s.createdAt)}</div>
+      </div>
+      <div class="session-status ${cls}">${label}</div>
+      <div style="font-size:13px;color:#555;line-height:1.6;margin-bottom:10px;">${escHtml(s.msg)}</div>
+      <div class="session-card-actions">${actionBtns}</div>
+    </div>`;
+  }).join('');
+}
+
+function reopenWhatsApp(id) {
+  const s = getSessions().find(x => x.id === id);
+  if (!s) return;
+  const text = `你好！我想跟进之前的分析请求。\n服务：${s.service}\n需求：${s.msg}`;
+  window.open('https://wa.me/60197144999?text=' + encodeURIComponent(text), '_blank');
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+</script>
+</body>
+</html>
