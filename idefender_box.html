@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I Defender 纸盒设计图</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0d0d1a; color: #ddd; font-family: 'Helvetica Neue', Arial, sans-serif; padding: 12px; }
+  h1 { color: #fff; font-size: 1.3em; text-align: center; padding: 14px 0 4px; letter-spacing: 1px; }
+  .subtitle { color: #4a7aff; font-size: 0.8em; text-align: center; margin-bottom: 18px; }
+  section { background: #141428; border: 1px solid #2a2a4a; border-radius: 10px; margin-bottom: 18px; padding: 14px; }
+  section h2 { color: #4a7aff; font-size: 1em; margin-bottom: 12px; border-bottom: 1px solid #2a2a4a; padding-bottom: 6px; }
+  svg { display: block; width: 100%; height: auto; }
+
+  /* BOM Table */
+  table { width: 100%; border-collapse: collapse; font-size: 0.78em; margin-top: 8px; }
+  th { background: #2a3a5a; color: #fff; padding: 7px 5px; text-align: center; }
+  td { padding: 6px 5px; text-align: center; border-bottom: 1px solid #2a2a4a; color: #ccc; }
+  tr:nth-child(even) td { background: #1a1a2e; }
+
+  /* Notes */
+  .note { background: #0a1a2a; border-left: 3px solid #4a7aff; padding: 8px 12px;
+          font-size: 0.82em; color: #88ccff; margin-top: 8px; border-radius: 0 6px 6px 0; line-height: 1.7; }
+  .tag { display: inline-block; background: #2a3a5a; color: #aaddff;
+         font-size: 0.72em; padding: 2px 8px; border-radius: 10px; margin: 3px 2px; }
+  .dim { color: #ffdd44; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<h1>📦 I DEFENDER</h1>
+<div class="subtitle">Raspberry Pi 4+ · Dual Fan Heatsink · Pi Camera V3 · 纸盒设计方案</div>
+
+<!-- ══════════════════════════════════════════════
+     图1: 爆炸视图 (俯视示意)
+══════════════════════════════════════════════ -->
+<section>
+  <h2>① 结构爆炸图 — 两件式抽屉盒</h2>
+  <svg viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg">
+    <!-- Outer sleeve -->
+    <rect x="10" y="70" width="340" height="110" rx="4"
+          fill="#1e1e2e" stroke="#888" stroke-width="2"/>
+    <text x="185" y="62" text-anchor="middle" fill="#aaa" font-size="11">外套筒 Outer Sleeve</text>
+    <text x="185" y="190" text-anchor="middle" fill="#ffdd44" font-size="10">182 × 92 × 82 mm</text>
+    <!-- Wall thickness marks -->
+    <rect x="10" y="70" width="6" height="110" fill="#444"/>
+    <rect x="344" y="70" width="6" height="110" fill="#444"/>
+    <rect x="10" y="70" width="340" height="6" fill="#444"/>
+    <rect x="10" y="174" width="340" height="6" fill="#444"/>
+    <text x="22" y="130" fill="#888" font-size="8" transform="rotate(-90,22,130)">2mm wall</text>
+
+    <!-- Inner tray pulled out to the right -->
+    <rect x="30" y="80" width="280" height="90" rx="3"
+          fill="#1e1e3a" stroke="#4a7aff" stroke-width="1.5" stroke-dasharray="4 2"/>
+    <text x="170" y="72" text-anchor="middle" fill="#4a7aff" font-size="10">内托 Inner Tray  176×86×75mm</text>
+
+    <!-- Pi zone -->
+    <rect x="38" y="88" width="162" height="74" rx="2"
+          fill="#0a2a1a" stroke="#00ff88" stroke-width="1.5"/>
+    <text x="119" y="122" text-anchor="middle" fill="#00ff88" font-size="9" font-weight="bold">Pi 4+</text>
+    <text x="119" y="134" text-anchor="middle" fill="#00ff88" font-size="8">85×56 mm PCB</text>
+
+    <!-- Heatsink inside Pi zone -->
+    <rect x="55" y="100" width="90" height="50" rx="2"
+          fill="#2a2a2a" stroke="#888" stroke-width="1" stroke-dasharray="3 2"/>
+    <text x="100" y="122" text-anchor="middle" fill="#aaa" font-size="8">Heatsink</text>
+    <text x="100" y="133" text-anchor="middle" fill="#888" font-size="7">58×58×65mm</text>
+
+    <!-- Fan circles -->
+    <circle cx="72" cy="92" r="10" fill="none" stroke="#4a7aff" stroke-width="1.2"/>
+    <circle cx="72" cy="92" r="4" fill="#0a0a3a" stroke="#4a7aff" stroke-width="0.8"/>
+    <circle cx="128" cy="92" r="10" fill="none" stroke="#4a7aff" stroke-width="1.2"/>
+    <circle cx="128" cy="92" r="4" fill="#0a0a3a" stroke="#4a7aff" stroke-width="0.8"/>
+    <text x="100" y="85" text-anchor="middle" fill="#4a7aff" font-size="7">Fan×2</text>
+
+    <!-- Camera zone -->
+    <rect x="208" y="88" width="50" height="50" rx="2"
+          fill="#2a1a3a" stroke="#bb88ff" stroke-width="1.5"/>
+    <circle cx="233" cy="113" r="14" fill="#0a0a2a" stroke="#bb88ff" stroke-width="1.2"/>
+    <circle cx="233" cy="113" r="6" fill="#1a1a4a" stroke="#8866cc" stroke-width="1"/>
+    <text x="233" y="150" text-anchor="middle" fill="#bb88ff" font-size="8">Camera V3</text>
+
+    <!-- Wire zone -->
+    <rect x="265" y="88" width="40" height="74" rx="2"
+          fill="#2a1a0a" stroke="#ffaa55" stroke-width="1.5"/>
+    <text x="285" y="118" text-anchor="middle" fill="#ffaa55" font-size="7">线束</text>
+    <text x="285" y="130" text-anchor="middle" fill="#ffaa55" font-size="7">Wires</text>
+
+    <!-- Vent holes -->
+    <rect x="60" y="70" width="8" height="4" rx="1" fill="#4a7aff"/>
+    <rect x="80" y="70" width="8" height="4" rx="1" fill="#4a7aff"/>
+    <rect x="100" y="70" width="8" height="4" rx="1" fill="#4a7aff"/>
+    <rect x="120" y="70" width="8" height="4" rx="1" fill="#4a7aff"/>
+    <rect x="140" y="70" width="8" height="4" rx="1" fill="#4a7aff"/>
+    <text x="100" y="64" text-anchor="middle" fill="#4a7aff" font-size="7">通风槽</text>
+
+    <!-- Dimension lines -->
+    <line x1="10" y1="195" x2="350" y2="195" stroke="#ffdd44" stroke-width="0.8"/>
+    <line x1="10" y1="192" x2="10" y2="198" stroke="#ffdd44" stroke-width="0.8"/>
+    <line x1="350" y1="192" x2="350" y2="198" stroke="#ffdd44" stroke-width="0.8"/>
+  </svg>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     图2: 正视截面
+══════════════════════════════════════════════ -->
+<section>
+  <h2>② 正视截面 — 组件叠高</h2>
+  <svg viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg">
+    <!-- Outer box -->
+    <rect x="20" y="20" width="320" height="170" rx="3"
+          fill="#1a1a1a" stroke="#888" stroke-width="2"/>
+    <!-- Sleeve walls -->
+    <rect x="20" y="20" width="5" height="170" fill="#333"/>
+    <rect x="335" y="20" width="5" height="170" fill="#333"/>
+    <rect x="20" y="20" width="320" height="5" fill="#333"/>
+    <rect x="20" y="185" width="320" height="5" fill="#333"/>
+
+    <!-- Inner tray -->
+    <rect x="28" y="28" width="304" height="157" rx="2"
+          fill="#1e1e3a" stroke="#4a7aff" stroke-width="1.2" stroke-dasharray="3 2"/>
+
+    <!-- Pi PCB layer -->
+    <rect x="35" y="150" width="165" height="28" rx="2"
+          fill="#0a2a0a" stroke="#00ff88" stroke-width="1.5"/>
+    <text x="117" y="168" text-anchor="middle" fill="#00ff88" font-size="9" font-weight="bold">Pi 4+ PCB  — 17 mm</text>
+
+    <!-- Heatsink -->
+    <rect x="50" y="85" width="100" height="65" rx="2"
+          fill="#2a2a2a" stroke="#888" stroke-width="1.2"/>
+    <text x="100" y="110" text-anchor="middle" fill="#ccc" font-size="9">Heatsink</text>
+    <text x="100" y="123" text-anchor="middle" fill="#aaa" font-size="8">~45 mm</text>
+
+    <!-- Dual fans on top of heatsink -->
+    <rect x="50" y="63" width="44" height="22" rx="3"
+          fill="#0a0a3a" stroke="#4a7aff" stroke-width="1.2"/>
+    <rect x="106" y="63" width="44" height="22" rx="3"
+          fill="#0a0a3a" stroke="#4a7aff" stroke-width="1.2"/>
+    <text x="72" y="78" text-anchor="middle" fill="#4a7aff" font-size="8">Fan 1</text>
+    <text x="128" y="78" text-anchor="middle" fill="#4a7aff" font-size="8">Fan 2</text>
+    <text x="100" y="58" text-anchor="middle" fill="#4a7aff" font-size="7">双风扇 — 10 mm each</text>
+
+    <!-- Camera module (right side) -->
+    <rect x="215" y="110" width="50" height="50" rx="3"
+          fill="#2a1a3a" stroke="#bb88ff" stroke-width="1.5"/>
+    <circle cx="240" cy="135" r="15" fill="#0a0a2a" stroke="#bb88ff" stroke-width="1.2"/>
+    <circle cx="240" cy="135" r="7" fill="#111133" stroke="#8866cc" stroke-width="1"/>
+    <text x="240" y="172" text-anchor="middle" fill="#bb88ff" font-size="8">Camera V3</text>
+
+    <!-- Wire bundle -->
+    <rect x="275" y="120" width="48" height="58" rx="3"
+          fill="#2a1a0a" stroke="#ffaa55" stroke-width="1.5"/>
+    <text x="299" y="148" text-anchor="middle" fill="#ffaa55" font-size="8">线束</text>
+
+    <!-- Vent slots top -->
+    <rect x="55"  y="20" width="12" height="5" rx="1" fill="#4a7aff"/>
+    <rect x="80"  y="20" width="12" height="5" rx="1" fill="#4a7aff"/>
+    <rect x="105" y="20" width="12" height="5" rx="1" fill="#4a7aff"/>
+    <rect x="130" y="20" width="12" height="5" rx="1" fill="#4a7aff"/>
+
+    <!-- Height annotations right side -->
+    <!-- Total height -->
+    <line x1="350" y1="20" x2="350" y2="190" stroke="#ffdd44" stroke-width="1"/>
+    <line x1="346" y1="20"  x2="354" y2="20"  stroke="#ffdd44" stroke-width="1"/>
+    <line x1="346" y1="190" x2="354" y2="190" stroke="#ffdd44" stroke-width="1"/>
+    <text x="358" y="108" fill="#ffdd44" font-size="9" font-weight="bold">82mm</text>
+
+    <!-- Pi layer height -->
+    <line x1="205" y1="150" x2="205" y2="178" stroke="#00ff88" stroke-width="0.8"/>
+    <line x1="202" y1="150" x2="208" y2="150" stroke="#00ff88" stroke-width="0.8"/>
+    <line x1="202" y1="178" x2="208" y2="178" stroke="#00ff88" stroke-width="0.8"/>
+    <text x="210" y="167" fill="#00ff88" font-size="7">17mm</text>
+
+    <!-- Heatsink height -->
+    <line x1="155" y1="85" x2="155" y2="150" stroke="#888" stroke-width="0.8"/>
+    <line x1="152" y1="85"  x2="158" y2="85"  stroke="#888" stroke-width="0.8"/>
+    <line x1="152" y1="150" x2="158" y2="150" stroke="#888" stroke-width="0.8"/>
+    <text x="160" y="120" fill="#aaa" font-size="7">45mm</text>
+
+    <!-- Fan height -->
+    <line x1="155" y1="63" x2="155" y2="85" stroke="#4a7aff" stroke-width="0.8"/>
+    <line x1="152" y1="63" x2="158" y2="63" stroke="#4a7aff" stroke-width="0.8"/>
+    <line x1="152" y1="85" x2="158" y2="85" stroke="#4a7aff" stroke-width="0.8"/>
+    <text x="160" y="76" fill="#4a7aff" font-size="7">22mm</text>
+
+    <!-- Total dim bottom -->
+    <line x1="20" y1="200" x2="340" y2="200" stroke="#ffdd44" stroke-width="1"/>
+    <line x1="20" y1="197" x2="20" y2="203" stroke="#ffdd44" stroke-width="1"/>
+    <line x1="340" y1="197" x2="340" y2="203" stroke="#ffdd44" stroke-width="1"/>
+    <text x="180" y="215" text-anchor="middle" fill="#ffdd44" font-size="10" font-weight="bold">182 mm</text>
+  </svg>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     图3: 裁切模板 (内托)
+══════════════════════════════════════════════ -->
+<section>
+  <h2>③ 内托裁切展开图 (3mm 瓦楞纸板)</h2>
+  <svg viewBox="0 0 360 280" xmlns="http://www.w3.org/2000/svg">
+    <!-- Scale note -->
+    <text x="180" y="12" text-anchor="middle" fill="#888" font-size="8">展开尺寸: 290 × 230 mm (非1:1比例)</text>
+
+    <!-- Define positions: scale 290→300px, 230→250px -->
+    <!-- H_tray=75, W_tray=170, D_tray=80 (px scaled: *1.0) -->
+    <!-- Let's use scale ~0.9: H=67, W=153, D=72 -->
+    <!-- Origin: bx=85, by=90 -->
+
+    <defs>
+      <pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="6" stroke="#666" stroke-width="1"/>
+      </pattern>
+    </defs>
+
+    <!-- Corner cuts (hatched) -->
+    <rect x="22" y="22" width="67" height="67" fill="url(#hatch)" stroke="#666" stroke-width="1" stroke-dasharray="3 2"/>
+    <text x="55" y="55" text-anchor="middle" fill="#888" font-size="8">✂</text>
+    <text x="55" y="66" text-anchor="middle" fill="#888" font-size="7">剪掉</text>
+
+    <rect x="271" y="22" width="67" height="67" fill="url(#hatch)" stroke="#666" stroke-width="1" stroke-dasharray="3 2"/>
+    <text x="304" y="55" text-anchor="middle" fill="#888" font-size="8">✂</text>
+
+    <rect x="22" y="161" width="67" height="67" fill="url(#hatch)" stroke="#666" stroke-width="1" stroke-dasharray="3 2"/>
+    <text x="55" y="196" text-anchor="middle" fill="#888" font-size="8">✂</text>
+
+    <rect x="271" y="161" width="67" height="67" fill="url(#hatch)" stroke="#666" stroke-width="1" stroke-dasharray="3 2"/>
+    <text x="304" y="196" text-anchor="middle" fill="#888" font-size="8">✂</text>
+
+    <!-- Long side flap TOP (fold down) -->
+    <rect x="89" y="22" width="182" height="67" rx="2"
+          fill="#d4edda" stroke="#155724" stroke-width="1.5"/>
+    <text x="180" y="52" text-anchor="middle" fill="#155724" font-size="9" font-weight="bold">长侧板 A</text>
+    <text x="180" y="64" text-anchor="middle" fill="#155724" font-size="8">170 × 75 mm</text>
+
+    <!-- Base -->
+    <rect x="89" y="89" width="182" height="72" rx="2"
+          fill="#e8f4fd" stroke="#004085" stroke-width="2"/>
+    <text x="180" y="121" text-anchor="middle" fill="#004085" font-size="10" font-weight="bold">底板 BASE</text>
+    <text x="180" y="135" text-anchor="middle" fill="#004085" font-size="9">170 × 80 mm</text>
+
+    <!-- Long side flap BOTTOM (fold up) -->
+    <rect x="89" y="161" width="182" height="67" rx="2"
+          fill="#d4edda" stroke="#155724" stroke-width="1.5"/>
+    <text x="180" y="191" text-anchor="middle" fill="#155724" font-size="9" font-weight="bold">长侧板 B</text>
+    <text x="180" y="203" text-anchor="middle" fill="#155724" font-size="8">170 × 75 mm</text>
+
+    <!-- Short end flap LEFT -->
+    <rect x="22" y="89" width="67" height="72" rx="2"
+          fill="#fff3cd" stroke="#856404" stroke-width="1.5"/>
+    <text x="55" y="121" text-anchor="middle" fill="#856404" font-size="8" font-weight="bold">端板 A</text>
+    <text x="55" y="133" text-anchor="middle" fill="#856404" font-size="7">75×74mm</text>
+
+    <!-- Short end flap RIGHT -->
+    <rect x="271" y="89" width="67" height="72" rx="2"
+          fill="#fff3cd" stroke="#856404" stroke-width="1.5"/>
+    <text x="304" y="121" text-anchor="middle" fill="#856404" font-size="8" font-weight="bold">端板 B</text>
+    <text x="304" y="133" text-anchor="middle" fill="#856404" font-size="7">75×74mm</text>
+
+    <!-- Fold lines (red dashed) -->
+    <line x1="89" y1="22" x2="89" y2="228" stroke="#cc4400" stroke-width="1.5" stroke-dasharray="5 3"/>
+    <line x1="271" y1="22" x2="271" y2="228" stroke="#cc4400" stroke-width="1.5" stroke-dasharray="5 3"/>
+    <line x1="22" y1="89" x2="338" y2="89" stroke="#cc4400" stroke-width="1.5" stroke-dasharray="5 3"/>
+    <line x1="22" y1="161" x2="338" y2="161" stroke="#cc4400" stroke-width="1.5" stroke-dasharray="5 3"/>
+
+    <!-- Dimension arrow bottom -->
+    <line x1="89" y1="240" x2="271" y2="240" stroke="#ffdd44" stroke-width="1.2"/>
+    <polygon points="89,237 89,243 82,240" fill="#ffdd44"/>
+    <polygon points="271,237 271,243 278,240" fill="#ffdd44"/>
+    <text x="180" y="252" text-anchor="middle" fill="#ffdd44" font-size="9" font-weight="bold">170 mm</text>
+
+    <!-- Dimension right side -->
+    <line x1="330" y1="89" x2="330" y2="161" stroke="#cc4400" stroke-width="1.2"/>
+    <polygon points="327,89 333,89 330,82" fill="#cc4400"/>
+    <polygon points="327,161 333,161 330,168" fill="#cc4400"/>
+    <text x="340" y="128" text-anchor="middle" fill="#cc4400" font-size="8">80mm</text>
+
+    <line x1="338" y1="22" x2="338" y2="89" stroke="#888" stroke-width="1.2"/>
+    <polygon points="335,22 341,22 338,15" fill="#888"/>
+    <polygon points="335,89 341,89 338,96" fill="#888"/>
+    <text x="350" y="58" text-anchor="middle" fill="#888" font-size="8">75mm</text>
+
+    <!-- Legend -->
+    <line x1="22" y1="265" x2="42" y2="265" stroke="#cc4400" stroke-width="1.5" stroke-dasharray="5 3"/>
+    <text x="47" y="268" fill="#cc4400" font-size="8">= 折痕 Fold</text>
+    <line x1="130" y1="265" x2="150" y2="265" stroke="#155724" stroke-width="1.5"/>
+    <text x="155" y="268" fill="#155724" font-size="8">= 裁切 Cut</text>
+    <rect x="240" y="258" width="12" height="12" fill="url(#hatch)" stroke="#666" stroke-width="0.8"/>
+    <text x="256" y="268" fill="#888" font-size="8">= 剪掉</text>
+  </svg>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     图4: 外套筒板件
+══════════════════════════════════════════════ -->
+<section>
+  <h2>④ 外套筒 5 块板件 (2mm 灰纸板)</h2>
+  <svg viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg">
+    <!-- Panel 1: Top -->
+    <rect x="10" y="10" width="160" height="80" rx="3"
+          fill="#dce8f7" stroke="#005588" stroke-width="1.5"/>
+    <text x="90" y="45" text-anchor="middle" fill="#005588" font-size="9" font-weight="bold">① 顶板 TOP</text>
+    <text x="90" y="60" text-anchor="middle" fill="#005588" font-size="8">182 × 92 mm</text>
+    <text x="90" y="74" text-anchor="middle" fill="#0077aa" font-size="7">× 1件</text>
+
+    <!-- Panel 2: Bottom -->
+    <rect x="185" y="10" width="160" height="80" rx="3"
+          fill="#dce8f7" stroke="#005588" stroke-width="1.5"/>
+    <text x="265" y="45" text-anchor="middle" fill="#005588" font-size="9" font-weight="bold">② 底板 BOTTOM</text>
+    <text x="265" y="60" text-anchor="middle" fill="#005588" font-size="8">182 × 92 mm</text>
+    <text x="265" y="74" text-anchor="middle" fill="#0077aa" font-size="7">× 1件</text>
+
+    <!-- Panel 3: Front long side with vent -->
+    <rect x="10" y="105" width="160" height="60" rx="3"
+          fill="#fde8d8" stroke="#883300" stroke-width="1.5"/>
+    <text x="90" y="123" text-anchor="middle" fill="#883300" font-size="8.5" font-weight="bold">③ 前长侧板 FRONT</text>
+    <text x="90" y="136" text-anchor="middle" fill="#883300" font-size="8">182 × 82 mm  × 1件</text>
+    <!-- Vent cutout -->
+    <rect x="45" y="145" width="70" height="14" rx="3"
+          fill="#c8d8ff" stroke="#4a7aff" stroke-width="1.2"/>
+    <text x="80" y="155" text-anchor="middle" fill="#0033cc" font-size="7">通风孔 70×25mm</text>
+
+    <!-- Panel 4: Back long side with vent -->
+    <rect x="185" y="105" width="160" height="60" rx="3"
+          fill="#fde8d8" stroke="#883300" stroke-width="1.5"/>
+    <text x="265" y="123" text-anchor="middle" fill="#883300" font-size="8.5" font-weight="bold">④ 后长侧板 BACK</text>
+    <text x="265" y="136" text-anchor="middle" fill="#883300" font-size="8">182 × 82 mm  × 1件</text>
+    <!-- Vent cutout -->
+    <rect x="220" y="145" width="70" height="14" rx="3"
+          fill="#c8d8ff" stroke="#4a7aff" stroke-width="1.2"/>
+    <text x="255" y="155" text-anchor="middle" fill="#0033cc" font-size="7">通风孔 70×25mm</text>
+
+    <!-- Panel 5: Closed end with cable holes -->
+    <rect x="100" y="175" width="160" height="38" rx="3"
+          fill="#e8f7dc" stroke="#336600" stroke-width="1.5"/>
+    <text x="180" y="191" text-anchor="middle" fill="#336600" font-size="8.5" font-weight="bold">⑤ 封闭端板  88 × 78 mm  × 1件</text>
+    <!-- holes -->
+    <rect x="115" y="197" width="14" height="11" rx="2" fill="#fff0c0" stroke="#886600" stroke-width="1"/>
+    <text x="122" y="206" text-anchor="middle" fill="#554400" font-size="6">USB-C</text>
+    <rect x="140" y="197" width="20" height="8" rx="2" fill="#fff0c0" stroke="#886600" stroke-width="1"/>
+    <text x="150" y="205" text-anchor="middle" fill="#554400" font-size="6">HDMI</text>
+    <rect x="172" y="197" width="18" height="11" rx="2" fill="#fff0c0" stroke="#886600" stroke-width="1"/>
+    <text x="181" y="206" text-anchor="middle" fill="#554400" font-size="6">ETH</text>
+    <rect x="202" y="197" width="25" height="5" rx="1" fill="#fff0c0" stroke="#886600" stroke-width="1"/>
+    <text x="214" y="210" text-anchor="middle" fill="#554400" font-size="6">Cam排线</text>
+
+    <!-- One end open note -->
+    <text x="10" y="218" fill="#cc4400" font-size="8">← 另一端开口，供内托推入 (Open end for tray)</text>
+  </svg>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     图5: 组装步骤
+══════════════════════════════════════════════ -->
+<section>
+  <h2>⑤ 组装步骤 & 材料清单</h2>
+
+  <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+    <span class="tag">Step 1: 裁切内托展开图</span>
+    <span class="tag">Step 2: 划折痕线</span>
+    <span class="tag">Step 3: 折叠90°</span>
+    <span class="tag">Step 4: 热熔胶粘合四角</span>
+    <span class="tag">Step 5: 裁5块外套筒板</span>
+    <span class="tag">Step 6: 开通风孔 + 接口孔</span>
+    <span class="tag">Step 7: 组装外套筒</span>
+    <span class="tag">Step 8: 白纸包裹外层</span>
+    <span class="tag">Step 9: 内托铺EVA泡棉切槽</span>
+    <span class="tag">Step 10: 装入组件测试</span>
+  </div>
+
+  <table>
+    <tr>
+      <th>#</th><th>材料</th><th>规格</th><th>数量</th>
+    </tr>
+    <tr><td>1</td><td>3mm 瓦楞纸板</td><td>A3 (297×420)</td><td>1张</td></tr>
+    <tr><td>2</td><td>2mm 灰纸板</td><td>A3 (297×420)</td><td>2张</td></tr>
+    <tr><td>3</td><td>白色铜版纸 120g</td><td>A3</td><td>1张</td></tr>
+    <tr><td>4</td><td>深色纸 / 黑纸</td><td>A4</td><td>1张</td></tr>
+    <tr><td>5</td><td>热熔胶棒</td><td>标准</td><td>5根+</td></tr>
+    <tr><td>6</td><td>5mm EVA泡棉</td><td>A5</td><td>1张</td></tr>
+    <tr><td>7</td><td>塑料格栅/网</td><td>8×3 cm</td><td>2片</td></tr>
+    <tr><td>8</td><td>圆形磁扣</td><td>Ø6 mm</td><td>4粒</td></tr>
+    <tr><td>9</td><td>美工刀 + 钢尺</td><td>—</td><td>必备</td></tr>
+  </table>
+
+  <div class="note">
+    ★ <span class="dim">最终外尺寸: 182 × 92 × 82 mm</span><br>
+    ★ 风扇朝上吹，顶板通风槽必须保留<br>
+    ★ Camera 排线从顶板 25×3mm 槽穿出<br>
+    ★ 内托深色包裹，外套筒白色，视觉对比参考您的参考盒<br>
+    ★ 磁扣位置: 内托前缘×2 + 套筒内壁×2
+  </div>
+</section>
+
+<div style="text-align:center; color:#444; font-size:0.75em; padding:20px 0;">
+  I DEFENDER Box Design · Raspberry Pi 4+ Build
+</div>
+
+</body>
+</html>
