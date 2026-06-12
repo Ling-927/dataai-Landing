@@ -57,8 +57,8 @@ cam_lens_d = 7.4;
 cam_fpc_w  = 16;
 cam_fpc_t  = 2;
 // Camera position inside panel (from panel bottom)
-cam_z_in_panel = 125;   // near top of panel
-cam_tilt   = 15;         // downward tilt angle (degrees)
+cam_z_in_panel = 148;   // maksimum atas panel — tinggi untuk sudut turun lebih tajam
+cam_tilt   = 35;         // downward tilt untuk tangkap no. plate kenderaan (optimal 30-40deg)
 
 // ============================================================
 // BUZZER — 12mm passive buzzer (actual)
