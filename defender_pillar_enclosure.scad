@@ -1,490 +1,765 @@
 // ============================================================
-// Defender Stone Pillar Enclosure
-// Final Year Project - Raspberry Pi 4 + Pi Camera V3
+// DEFENDER - Stone Pillar Enclosure
+// Final Year Project — Raspberry Pi 4 + Pi Camera V3 Housing
 // ============================================================
-// A stone pillar aesthetic enclosure with camera mount,
-// RPi housing, fan openings, hex vents, and cable management.
-// ============================================================
-
-// --- RENDER CONTROL ---
-// Set PART to one of:
-//   "assembly"       - full assembly preview
-//   "front_shell"    - front half shell
-//   "back_shell"     - back half shell
-//   "camera_bracket" - camera mount bracket
-//   "cable_cover"    - bottom cable management cover
-PART = "assembly";
-
-// ============================================================
-// GLOBAL PARAMETERS
+// Description : Parametric stone pillar aesthetic enclosure
+//               with Pi Camera V3 mount, RPi4 housing,
+//               dual-fan ventilation, hex grilles, cable
+//               management trunking, and M4 base mounting.
+//               Designed for FDM printing as 4 separate parts.
+// Units       : Millimeters (mm)
+// Render      : F5 = preview,  F6 = full render for STL export
+// Export STL  : Set PART variable (see below), then F6 + Export
 // ============================================================
 
-// Overall enclosure dimensions
-total_width  = 120;   // mm, X axis
-total_depth  = 80;    // mm, Y axis
-total_height = 300;   // mm, Z axis
-
-// Wall thickness
-wall = 3;             // mm
-
-// Chamfer size on vertical edges
-chamfer = 6;          // mm
-
-// Stone groove parameters
-groove_depth  = 1.0;  // mm deep into wall
-groove_width  = 1.5;  // mm wide
-groove_spacing = 20;  // mm between grooves
-
-// --- Section heights ---
-base_height   = 40;   // cable management section
-mid_height    = 180;  // RPi + fan section
-top_height    = 80;   // camera section
-// total_height = base_height + mid_height + top_height = 300
-
-// --- Camera parameters ---
-camera_lens_dia    = 12;   // mm lens hole diameter
-camera_pcb_w       = 25;   // mm camera PCB width
-camera_pcb_h       = 24;   // mm camera PCB height
-camera_pcb_thick   = 10;   // mm standoff + PCB depth
-hood_depth         = 18;   // mm how far the visor protrudes
-hood_height        = 10;   // mm thickness of visor
-hood_width         = 50;   // mm width of visor
-
-// --- RPi compartment parameters ---
-rpi_pcb_w    = 85;    // mm RPi 4 PCB width
-rpi_pcb_d    = 56;    // mm RPi 4 PCB depth
-rpi_clearance = 20;   // mm height clearance above PCB
-rpi_floor    = wall + 2; // mm floor above base section
-
-// --- Fan parameters ---
-fan_size     = 40;    // mm fan opening (square)
-fan_corner_r = 4;     // mm rounded corners on fan opening
-fan_count    = 2;     // two fans side by side
-fan_gap      = 4;     // mm gap between fans
-
-// --- Hex vent parameters ---
-hex_r        = 4;     // mm hex cell circumradius
-hex_margin   = wall + 2; // mm border margin for hex grid
-
-// --- Cable management ---
-cable_hole_dia  = 12; // mm cable exit hole diameter
-cable_hole_count = 3; // number of exit holes at base
-
-// --- Base mounting ---
-mount_screw_dia = 4.5; // mm M4 screw hole (clearance)
-mount_boss_dia  = 10;  // mm boss outer diameter
-mount_inset     = 12;  // mm inset from corner
-
-// --- Split: front/back shell divide at Y midplane ---
-split_y = total_depth / 2; // 40mm
+// ============================================================
+// GLOBAL RESOLUTION
+// ============================================================
+$fn = 64;   // Facets for circles/cylinders (increase for smoother curves)
 
 // ============================================================
-// UTILITY MODULES
+// MASTER PARAMETRIC DIMENSIONS
+// ============================================================
+total_w     = 120;   // Overall enclosure width  (X axis)
+total_d     = 80;    // Overall enclosure depth  (Y axis)
+total_h     = 300;   // Overall enclosure height (Z axis)
+wall_t      = 3;     // Wall thickness
+chamfer     = 4;     // Edge bevel / chamfer size on outer corners
+
+// ============================================================
+// VERTICAL SECTION HEIGHTS  (must sum to total_h = 300)
+// ============================================================
+cable_h     = 50;    // Bottom:  cable management trunking section
+rpi_h       = 110;   // Middle:  Raspberry Pi 4 housing section
+cam_h       = 90;    // Top:     camera + visor section
+top_cap_h   = 50;    // Cap:     solid top cap (cable_h+rpi_h+cam_h+top_cap_h = 300)
+
+// ============================================================
+// STONE TEXTURE PARAMETERS
+// ============================================================
+groove_d    = 0.8;   // Depth of each horizontal stone joint groove
+groove_w    = 1.4;   // Width (height in Z) of each groove line
+groove_step = 20;    // Vertical spacing between grooves (simulates block height)
+
+// ============================================================
+// RASPBERRY PI 4 PCB PARAMETERS
+// ============================================================
+rpi_w       = 85;    // RPi4 PCB width
+rpi_d       = 56;    // RPi4 PCB depth
+rpi_pcb_t   = 1.6;   // PCB thickness
+rpi_clear   = 22;    // Clearance above PCB for tallest component (USB/GPIO)
+rpi_standoff= 5;     // Standoff height below PCB
+
+// RPi4 standard mounting hole pattern: 58mm x 49mm
+rpi_mnt_x   = 58 / 2;
+rpi_mnt_y   = 49 / 2;
+
+// ============================================================
+// FAN PARAMETERS  (two 40 mm fans, side by side on front face)
+// ============================================================
+fan_size    = 40;    // Fan frame side length
+fan_hole_r  = 17;    // Airflow opening radius
+fan_gap     = 6;     // Gap between the two fan frames
+fan_screw_d = 3.2;   // Fan corner mounting screw hole diameter (M3)
+
+// ============================================================
+// HEX VENTILATION GRILLE PARAMETERS (side walls)
+// ============================================================
+hex_r       = 4;     // Hexagon circumradius
+hex_gap     = 1.5;   // Material gap between adjacent hexagons
+hex_rows    = 4;     // Rows of hexagons per grille
+hex_cols    = 3;     // Columns of hexagons per grille
+
+// ============================================================
+// PI CAMERA V3 PARAMETERS
+// ============================================================
+cam_lens_d  = 12;    // Lens cutout diameter (12 mm per Pi Camera V3 spec)
+cam_pcb_w   = 25;    // Camera PCB width
+cam_pcb_d   = 24;    // Camera PCB depth
+cam_pocket  = 3;     // Depth of PCB seating pocket behind front wall
+cam_z_offset= 40;    // Height of lens hole above start of camera section
+
+// Protective visor / hood above the camera lens
+visor_proj  = 20;    // How far the visor extends forward (Y direction)
+visor_t     = 5;     // Visor slab thickness
+visor_angle = 10;    // Downward tilt of visor (degrees) for rain runoff
+
+// ============================================================
+// CABLE MANAGEMENT PARAMETERS
+// ============================================================
+cable_slot_w= 20;    // Width of each cable exit slot
+cable_slot_h= 14;    // Height of each cable exit slot
+num_slots   = 3;     // Number of cable exit slots on front face
+
+// ============================================================
+// M4 BASE MOUNTING HOLES (pole / wall mount)
+// ============================================================
+m4_d        = 4.4;   // M4 clearance hole diameter
+m4_boss_od  = 10;    // Boss outer diameter
+m4_boss_h   = 8;     // Boss height above base
+m4_inset_x  = 12;    // X inset from outer wall centre to boss centre
+m4_inset_y  = 12;    // Y inset from outer wall centre to boss centre
+
+// ============================================================
+// PART SELECTOR — change this value, then render (F6) + Export STL
+//   0 = Full assembly (all parts, exploded for overview)
+//   1 = Front Shell  (print upright, needs supports for visor + fans)
+//   2 = Back Shell   (print upright)
+//   3 = Camera Bracket (print flat)
+//   4 = Cable Cover  (print upright)
+// ============================================================
+PART = 0;
+
+// ============================================================
+// ============================================================
+//                    UTILITY MODULES
+// ============================================================
 // ============================================================
 
-// Rounded rectangle in 2D (for extrusion)
-module rounded_rect_2d(w, d, r) {
-    offset(r = r) offset(r = -r)
-        square([w, d], center = true);
-}
-
-// Chamfered rectangular prism (vertical chamfers on 4 corners)
-// Chamfer is a 45-degree cut along the full Z height
-module chamfered_box(w, d, h, ch) {
-    // Create octagonal cross-section by subtracting corner prisms
-    difference() {
-        cube([w, d, h], center = false);
-        // Cut each vertical corner
-        translate([0, 0, -1])
-            rotate([0, 0, 45])
-                cube([ch * 1.415, ch * 1.415, h + 2], center = true);
-        translate([w, 0, -1])
-            rotate([0, 0, 45])
-                cube([ch * 1.415, ch * 1.415, h + 2], center = true);
-        translate([0, d, -1])
-            rotate([0, 0, 45])
-                cube([ch * 1.415, ch * 1.415, h + 2], center = true);
-        translate([w, d, -1])
-            rotate([0, 0, 45])
-                cube([ch * 1.415, ch * 1.415, h + 2], center = true);
+// --- Chamfered (beveled) box, centered at origin -----------
+// Uses Minkowski with an octahedron to bevel all 12 edges.
+module chamfered_box(w, d, h, c) {
+    minkowski() {
+        cube([w - 2*c, d - 2*c, h - 2*c], center=true);
+        sphere(r=c, $fn=8);  // $fn=8 keeps the bevel crisp (faceted)
     }
 }
 
-// Chamfered box centered at origin in X and Y, base at Z=0
-module chamfered_box_centered(w, d, h, ch) {
-    translate([-w/2, -d/2, 0])
-        chamfered_box(w, d, h, ch);
+// --- Solid box with Z=0 at its base ------------------------
+module zbox(w, d, h) {
+    translate([0, 0, h/2]) cube([w, d, h], center=true);
 }
 
-// Single hexagon in 2D (flat-top orientation)
-module hexagon_2d(r) {
-    polygon(points = [
-        [ r,       0       ],
-        [ r/2,     r*0.866 ],
-        [-r/2,     r*0.866 ],
-        [-r,       0       ],
-        [-r/2,    -r*0.866 ],
-        [ r/2,    -r*0.866 ]
-    ]);
+// --- Single flat-top hexagonal prism -----------------------
+module hex_prism(r, h) {
+    cylinder(r=r, h=h, $fn=6);
 }
 
-// ============================================================
-// MODULE: stone_groove_texture
-// Cuts horizontal groove lines into a flat face.
-// face_w = width, face_h = height of the face area
-// Grooves are cut as thin slots going into the wall.
-// Apply as difference() subtraction on a shell face.
-// ox, oy = offset of groove area origin
-// depth = how deep into the part (local -Y for front face)
-// ============================================================
-module stone_groove_texture(face_w, face_h, oz, cut_depth) {
-    num_grooves = floor(face_h / groove_spacing);
-    for (i = [1 : num_grooves - 1]) {
-        gz = oz + i * groove_spacing;
-        translate([-face_w/2 - 1, -cut_depth - 1, gz - groove_width/2])
-            cube([face_w + 2, cut_depth + 2, groove_width]);
-    }
-}
-
-// ============================================================
-// MODULE: hex_grid
-// Fills an area with hexagonal holes.
-// w, h = bounding box of grid area
-// Centered at origin in XZ, caller translates.
-// ============================================================
-module hex_grid(area_w, area_h, hr, thk) {
-    col_spacing = hr * 1.732;  // sqrt(3)*r  - flat-top hex
-    row_spacing = hr * 1.5;
-    cols = floor((area_w - 2 * hex_margin) / col_spacing);
-    rows = floor((area_h - 2 * hex_margin) / row_spacing);
-    start_x = -(cols - 1) * col_spacing / 2;
-    start_z = -(rows - 1) * row_spacing / 2;
+// --- Hexagonal grid cutout array ---------------------------
+// Generates a cols x rows hexagonal grid centred at origin,
+// ready to be subtracted from a wall.
+module hex_grid(cols, rows, r, gap, depth) {
+    sx = r * 2 + gap;
+    sy = r * sqrt(3) + gap;
     for (row = [0 : rows - 1]) {
-        offset_x = (row % 2 == 0) ? 0 : col_spacing / 2;
         for (col = [0 : cols - 1]) {
-            cx = start_x + col * col_spacing + offset_x;
-            cz = start_z + row * row_spacing;
-            translate([cx, 0, cz])
-                rotate([90, 0, 0])
-                    linear_extrude(thk + 2)
-                        hexagon_2d(hr * 0.82);
+            ox = (row % 2 == 1) ? sx / 2 : 0;
+            translate([
+                col * sx + ox - (cols - 1) * sx / 2,
+                row * sy - (rows - 1) * sy / 2,
+                0
+            ])
+            hex_prism(r, depth + 1);
         }
     }
 }
 
-// ============================================================
-// MODULE: fan_opening
-// Two 40mm fan openings side by side on the front face.
-// Centered at origin, caller translates.
-// ============================================================
-module fan_opening(thk) {
-    total_fans_w = fan_count * fan_size + (fan_count - 1) * fan_gap;
-    for (i = [0 : fan_count - 1]) {
-        cx = (i - (fan_count - 1) / 2) * (fan_size + fan_gap);
-        translate([cx, 0, 0])
-            rotate([90, 0, 0])
-                linear_extrude(thk + 2)
-                    offset(r = fan_corner_r) offset(r = -fan_corner_r)
-                        square([fan_size - 2, fan_size - 2], center = true);
+// --- Horizontal stone groove lines on a face ---------------
+// Subtracts horizontal channels into a face lying in the XZ plane.
+// Call this while the face normal is pointing in +Y (front face).
+module stone_grooves_xz(face_w, face_h, depth, gw, step) {
+    num = floor(face_h / step);
+    for (i = [1 : num]) {
+        translate([0, -depth / 2, i * step - face_h / 2])
+            cube([face_w + 2, depth, gw], center=true);
+    }
+}
+
+// --- M4 mounting boss with through-hole --------------------
+module m4_boss(h) {
+    difference() {
+        cylinder(d=m4_boss_od, h=h);
+        cylinder(d=m4_d, h=h + 1);
+    }
+}
+
+// --- 40 mm fan cutout (circle + 4 corner screw holes) ------
+// Subtract this from a wall to create a fan mounting opening.
+module fan_cutout(wall_thickness) {
+    // Main airflow hole
+    cylinder(r=fan_hole_r, h=wall_thickness + 2, center=true);
+    // Four corner screw holes
+    co = fan_size / 2 - 4;
+    for (sx = [-1, 1]) for (sy = [-1, 1]) {
+        translate([sx * co, sy * co, 0])
+            cylinder(d=fan_screw_d, h=wall_thickness + 2,
+                     center=true, $fn=16);
     }
 }
 
 // ============================================================
-// MODULE: rpi_compartment
-// Interior cavity for RPi 4 PCB. Carved out of mid section.
-// Centered at X=0, bottom at Z = base_height + rpi_floor.
 // ============================================================
-module rpi_compartment() {
-    rz = base_height + rpi_floor;
-    cavity_h = rpi_clearance + 5; // PCB + clearance
-    // Main RPi cavity
-    translate([0, 0, rz])
-        cube([rpi_pcb_w + 4, rpi_pcb_d + 4, cavity_h + 10], center = false);
+//                 SECTION MODULES
+// Each section contributes its own interior features.
+// All sections share the outer shell from outer_shell().
+// ============================================================
+// ============================================================
+
+// ============================================================
+// OUTER PILLAR SHELL
+// Creates the full-height hollow chamfered rectangular tube
+// with stone groove texture on all four faces.
+// ============================================================
+module outer_shell() {
+    difference() {
+        // Chamfered outer solid
+        translate([0, 0, total_h / 2])
+            chamfered_box(total_w, total_d, total_h, chamfer);
+
+        // Hollow out interior (open top for assembly access)
+        translate([0, 0, wall_t + total_h / 2])
+            cube([
+                total_w - 2 * wall_t,
+                total_d - 2 * wall_t,
+                total_h + 1
+            ], center=true);
+
+        // --- Stone groove texture: FRONT face (+Y) ---
+        translate([0, total_d / 2, total_h / 2])
+            stone_grooves_xz(total_w, total_h,
+                             groove_d, groove_w, groove_step);
+
+        // --- Stone groove texture: BACK face (-Y) ---
+        // Mirror: rotate 180 deg around Z so grooves still go inward
+        translate([0, -total_d / 2, total_h / 2])
+        rotate([0, 0, 180])
+            stone_grooves_xz(total_w, total_h,
+                             groove_d, groove_w, groove_step);
+
+        // --- Stone groove texture: LEFT face (-X) ---
+        translate([-total_w / 2, 0, total_h / 2])
+        rotate([0, 0, -90])
+            stone_grooves_xz(total_d, total_h,
+                             groove_d, groove_w, groove_step);
+
+        // --- Stone groove texture: RIGHT face (+X) ---
+        translate([total_w / 2, 0, total_h / 2])
+        rotate([0, 0, 90])
+            stone_grooves_xz(total_d, total_h,
+                             groove_d, groove_w, groove_step);
+    }
 }
 
 // ============================================================
-// MODULE: camera_section
-// Top section with lens hole and Pi Camera mount features.
-// Base at Z = base_height + mid_height
+// SECTION A — BOTTOM: Cable Management Trunking  (Z 0 → cable_h)
+// Features:
+//   - Cable exit slots on front face (3x)
+//   - Cable exit slot on back face (1x wide)
+//   - Slot through base plate for vertical cable routing
+//   - Internal cable trunking divider wall
+//   - 4x M4 mounting bosses at corners
 // ============================================================
-module camera_section_cutouts() {
-    cam_base_z = base_height + mid_height;
-    cam_center_z = cam_base_z + top_height / 2 + 5;
-    // Lens hole through front wall
-    translate([0, -total_depth/2 - 1, cam_center_z])
-        rotate([-90, 0, 0])
-            cylinder(d = camera_lens_dia, h = wall + 10, $fn = 40);
-    // Camera PCB recess pocket (inside)
-    translate([-camera_pcb_w/2, -total_depth/2 + wall, cam_center_z - camera_pcb_h/2])
-        cube([camera_pcb_w, camera_pcb_thick, camera_pcb_h]);
+module section_cable() {
+    z0 = 0;
+
+    // Internal divider — separates power cables from signal cables
+    translate([0, 0, z0 + wall_t + (cable_h - wall_t) / 2])
+        cube([
+            total_w - 2 * wall_t,
+            wall_t,
+            cable_h - wall_t - 1
+        ], center=true);
+
+    // --- M4 mounting bosses at base (4 corners) ---
+    for (sx = [-1, 1]) for (sy = [-1, 1]) {
+        translate([
+            sx * (total_w / 2 - m4_inset_x),
+            sy * (total_d / 2 - m4_inset_y),
+            z0
+        ])
+        m4_boss(m4_boss_h);
+    }
+}
+
+// Cutouts that go INTO the shell for the cable section
+module section_cable_cuts() {
+    z0 = 0;
+    slot_spacing = cable_slot_w + 8;
+
+    // Front face cable exit slots
+    for (i = [-(num_slots - 1) / 2 : (num_slots - 1) / 2]) {
+        translate([
+            i * slot_spacing,
+            total_d / 2,
+            z0 + wall_t + cable_slot_h / 2
+        ])
+        cube([cable_slot_w, wall_t + 2, cable_slot_h], center=true);
+    }
+
+    // Back face cable exit slot (wider — main cable bundle)
+    translate([0, -total_d / 2, z0 + wall_t + cable_slot_h / 2])
+        cube([cable_slot_w * 2, wall_t + 2, cable_slot_h], center=true);
+
+    // Base plate through-slot for vertical cable routing
+    translate([0, 0, -1])
+        cube([cable_slot_w * 1.5, 12, wall_t + 2], center=true);
+
+    // M4 clearance holes through base plate
+    for (sx = [-1, 1]) for (sy = [-1, 1]) {
+        translate([
+            sx * (total_w / 2 - m4_inset_x),
+            sy * (total_d / 2 - m4_inset_y),
+            -1
+        ])
+        cylinder(d=m4_d, h=wall_t + m4_boss_h + 2);
+    }
 }
 
 // ============================================================
-// MODULE: camera_bracket
-// Separate printed part: a bracket to hold Pi Camera V3.
-// Mounts inside top section.
+// SECTION B — MIDDLE: Raspberry Pi 4 Housing  (Z cable_h → cable_h+rpi_h)
+// Features:
+//   - 4x RPi4 PCB standoffs (M2.5, 58x49 mm hole pattern)
+//   - 2x 40 mm fan openings on front face (heatsink cooling)
+//   - Hex ventilation grilles on left and right side walls
+//   - Rear port cutouts (USB, HDMI, GPIO simplified openings)
 // ============================================================
-module camera_bracket() {
-    br_w = camera_pcb_w + 6;
-    br_h = camera_pcb_h + 6;
-    br_d = camera_pcb_thick + 4;
+module section_rpi() {
+    z0 = cable_h;
+
+    // --- RPi4 PCB standoffs ---
+    rpi_base_z = z0 + wall_t;
+    for (sx = [-1, 1]) for (sy = [-1, 1]) {
+        translate([sx * rpi_mnt_x, sy * rpi_mnt_y, rpi_base_z])
+        difference() {
+            cylinder(d=6, h=rpi_standoff);
+            cylinder(d=2.8, h=rpi_standoff + 1);   // M2.5 tap hole
+        }
+    }
+}
+
+// Cutouts for RPi section
+module section_rpi_cuts() {
+    z0    = cable_h;
+    fan_z = z0 + rpi_h / 2;           // Fans centred vertically in section
+    fan_spacing = fan_size + fan_gap;
+
+    // --- Two 40 mm fan openings on FRONT face ---
+    for (side = [-1, 1]) {
+        translate([side * fan_spacing / 2, total_d / 2, fan_z])
+        rotate([90, 0, 0])
+            fan_cutout(wall_t);
+    }
+
+    // --- Hex grille on LEFT side wall ---
+    translate([-total_w / 2, 0, fan_z])
+    rotate([0, 90, 0])
+        hex_grid(hex_cols, hex_rows, hex_r, hex_gap, wall_t);
+
+    // --- Hex grille on RIGHT side wall ---
+    translate([total_w / 2, 0, fan_z])
+    rotate([0, -90, 0])
+        hex_grid(hex_cols, hex_rows, hex_r, hex_gap, wall_t);
+
+    // --- Rear port cutouts (back face, -Y) ---
+    // USB-A × 2 stack area
+    translate([-22, -(total_d / 2), z0 + rpi_standoff + rpi_pcb_t + 10])
+        cube([30, wall_t + 2, 18], center=true);
+
+    // USB-C power + HDMI × 2 area
+    translate([18, -(total_d / 2), z0 + rpi_standoff + rpi_pcb_t + 7])
+        cube([36, wall_t + 2, 14], center=true);
+
+    // Ethernet port area
+    translate([-32, -(total_d / 2), z0 + rpi_standoff + rpi_pcb_t + 8])
+        cube([18, wall_t + 2, 16], center=true);
+
+    // GPIO ribbon cable slot (top of RPi section)
+    translate([0, -(total_d / 2), z0 + rpi_h - wall_t - 6])
+        cube([52, wall_t + 2, 10], center=true);
+}
+
+// ============================================================
+// SECTION C — TOP: Camera Mount + Visor  (Z cable_h+rpi_h → total_h)
+// Features:
+//   - 12 mm circular lens hole on front face
+//   - Camera PCB pocket (25 × 24 mm) behind front wall
+//   - Ribbon cable routing slot below PCB pocket
+//   - Protective angled visor / rain hood above lens
+//   - Two snap-post camera bracket mount points
+// ============================================================
+module section_camera() {
+    z0   = cable_h + rpi_h;
+    lens_z = z0 + cam_z_offset;       // Absolute Z of lens hole centre
+
+    // --- Camera PCB snap posts (inside front wall) ---
+    for (sx = [-1, 1]) {
+        translate([
+            sx * (cam_pcb_w / 2 + 3),
+            total_d / 2 - wall_t - cam_pocket - 1,
+            lens_z
+        ])
+        difference() {
+            cylinder(d=5, h=12, center=true);
+            cylinder(d=2.8, h=13, center=true);   // M2.5 tap hole
+        }
+    }
+
+    // --- Protective visor above lens ---
+    visor_base_z = lens_z + cam_lens_d / 2 + 3;
+    visor_w_act  = total_w - 2 * chamfer;
+
+    translate([0, total_d / 2 - wall_t / 2, visor_base_z])
+    rotate([-visor_angle, 0, 0])
     difference() {
         union() {
-            // Main bracket body
-            translate([-br_w/2, 0, -br_h/2])
-                cube([br_w, br_d, br_h]);
-            // Mounting tabs
-            translate([-br_w/2 - 8, 0, -4])
-                cube([8, br_d - 2, 8]);
-            translate([br_w/2, 0, -4])
-                cube([8, br_d - 2, 8]);
+            // Main horizontal slab
+            translate([0, visor_proj / 2, visor_t / 2])
+                cube([visor_w_act, visor_proj, visor_t], center=true);
+            // Left gusset
+            translate([-(visor_w_act / 2 - visor_t / 2), visor_proj * 0.3, 0])
+                linear_extrude(height=visor_t)
+                    polygon([[0,0],[0, visor_proj * 0.6],[-visor_t * 1.5, 0]]);
+            // Right gusset
+            translate([(visor_w_act / 2 - visor_t / 2), visor_proj * 0.3, 0])
+                linear_extrude(height=visor_t)
+                    polygon([[0,0],[0, visor_proj * 0.6],[visor_t * 1.5, 0]]);
         }
-        // Lens hole
-        translate([0, -1, 0])
-            rotate([-90, 0, 0])
-                cylinder(d = camera_lens_dia, h = br_d + 2, $fn = 40);
-        // PCB pocket
-        translate([-camera_pcb_w/2, wall, -camera_pcb_h/2])
-            cube([camera_pcb_w, camera_pcb_thick - 1, camera_pcb_h]);
-        // M2 camera PCB screw holes (21mm spacing)
-        for (mx = [-10.5, 10.5]) {
-            for (mz = [-7.5, 7.5]) {
-                translate([mx, -1, mz])
-                    rotate([-90, 0, 0])
-                        cylinder(d = 2.2, h = br_d + 2, $fn = 20);
-            }
-        }
+        // Front leading edge chamfer (rain runoff groove)
+        translate([0, visor_proj, visor_t])
+        rotate([45, 0, 0])
+            cube([visor_w_act + 2, 4, 4], center=true);
     }
 }
 
-// ============================================================
-// MODULE: base_mount_holes
-// M4 mounting screw holes at the four corners of the base.
-// ============================================================
-module base_mount_holes() {
-    positions = [
-        [ total_width/2 - mount_inset,  total_depth/2 - mount_inset ],
-        [-total_width/2 + mount_inset,  total_depth/2 - mount_inset ],
-        [ total_width/2 - mount_inset, -total_depth/2 + mount_inset ],
-        [-total_width/2 + mount_inset, -total_depth/2 + mount_inset ]
-    ];
-    for (p = positions) {
-        translate([p[0], p[1], -1])
-            cylinder(d = mount_screw_dia, h = wall + 2, $fn = 20);
-    }
+// Cutouts for camera section
+module section_camera_cuts() {
+    z0     = cable_h + rpi_h;
+    lens_z = z0 + cam_z_offset;
+
+    // --- Lens hole ---
+    translate([0, total_d / 2, lens_z])
+    rotate([90, 0, 0])
+        cylinder(d=cam_lens_d, h=wall_t + 2, center=true);
+
+    // --- Camera PCB seating pocket ---
+    translate([0, total_d / 2 - wall_t - cam_pocket / 2, lens_z])
+        cube([cam_pcb_w + 1, cam_pocket, cam_pcb_d + 1], center=true);
+
+    // --- Ribbon cable routing slot (below PCB pocket) ---
+    translate([0, total_d / 2, lens_z - cam_pcb_d / 2 - 3])
+    rotate([90, 0, 0])
+        cube([8, 5, wall_t + 2], center=true);
+
+    // --- Hex grille on LEFT side (camera section ventilation) ---
+    hex_z = z0 + (cam_h + top_cap_h) / 2;
+    translate([-total_w / 2, 0, hex_z])
+    rotate([0, 90, 0])
+        hex_grid(hex_cols, 2, hex_r, hex_gap, wall_t);
+
+    // --- Hex grille on RIGHT side ---
+    translate([total_w / 2, 0, hex_z])
+    rotate([0, -90, 0])
+        hex_grid(hex_cols, 2, hex_r, hex_gap, wall_t);
 }
 
 // ============================================================
-// MODULE: cable_cover
-// Separate printable bottom cover with cable exit holes.
-// Snaps onto / bolts to base of front/back shells.
 // ============================================================
-module cable_cover() {
-    cover_h = base_height - wall;
-    difference() {
-        union() {
-            // Outer shell of cable cover
-            difference() {
-                chamfered_box_centered(total_width, total_depth, cover_h, chamfer);
-                // Hollow interior
-                translate([0, 0, wall])
-                    cube([total_width - wall*2, total_depth - wall*2, cover_h], center = true);
-            }
-            // Internal cable guides/ribs
-            for (rx = [-20, 0, 20]) {
-                translate([rx - 1, -total_depth/2 + wall, wall])
-                    cube([2, total_depth - wall*2, cover_h - wall*2]);
-            }
-        }
-        // Cable exit holes at bottom face
-        spacing = (total_width - 40) / (cable_hole_count - 1);
-        for (i = [0 : cable_hole_count - 1]) {
-            cx = -( (total_width - 40) / 2 ) + i * spacing;
-            translate([cx, 0, -1])
-                cylinder(d = cable_hole_dia, h = wall + 2, $fn = 24);
-        }
-        // Stone groove texture on cable cover front face
-        translate([0, -total_depth/2, 0])
-            stone_groove_texture(total_width - chamfer*2, cover_h, 0, groove_depth);
-        // Stone groove texture on cable cover back face
-        translate([0, total_depth/2, 0])
-            mirror([0, 1, 0])
-                stone_groove_texture(total_width - chamfer*2, cover_h, 0, groove_depth);
-    }
-}
+//                 PRINTABLE PART MODULES
+// ============================================================
+// ============================================================
 
 // ============================================================
-// MODULE: front_shell
-// Front half of the main enclosure body (Y < 0 half).
-// Contains: camera lens cutout, fan openings, hex side vents,
-//           stone groove texture, RPi cavity cutout.
+// PART 1: FRONT SHELL
+// The front half (positive Y side) of the main enclosure body.
+// Clip plane is the XZ plane (Y = 0).
 // ============================================================
 module front_shell() {
+    color("SaddleBrown", 0.92)
     difference() {
         union() {
-            // Main body (front half)
-            difference() {
-                chamfered_box_centered(total_width, total_depth, total_height, chamfer);
-                // Hollow interior
-                translate([0, 0, wall])
-                    cube([total_width - wall*2, total_depth - wall*2, total_height], center = true);
-                // Cut at split plane — keep only Y <= 0 (front half)
-                translate([-total_width/2 - 1, 0, -1])
-                    cube([total_width + 2, total_depth/2 + 1, total_height + 2]);
+            // Shell body clipped to front half
+            intersection() {
+                outer_shell();
+                translate([0, total_d / 4, total_h / 2])
+                    cube([total_w + 2, total_d / 2 + 0.01, total_h + 2],
+                         center=true);
+            }
+            // Interior features that belong to front half
+            intersection() {
+                union() {
+                    section_cable();
+                    section_rpi();
+                    section_camera();
+                }
+                translate([0, total_d / 4, total_h / 2])
+                    cube([total_w + 2, total_d / 2, total_h + 2],
+                         center=true);
             }
         }
-        // --- Camera lens hole (top section front face) ---
-        cam_center_z = base_height + mid_height + top_height/2 + 5;
-        translate([0, -total_depth/2 - 1, cam_center_z])
-            rotate([-90, 0, 0])
-                cylinder(d = camera_lens_dia, h = wall + 5, $fn = 40);
+        // Apply all cutouts
+        section_cable_cuts();
+        section_rpi_cuts();
+        section_camera_cuts();
 
-        // --- Fan openings (mid section front face, lower half of mid) ---
-        fan_center_z = base_height + 50;
-        translate([0, -total_depth/2 - 1, fan_center_z])
-            fan_opening(wall + 2);
-
-        // --- Hex vent grilles on left side wall ---
-        hex_center_z = base_height + mid_height/2;
-        translate([-total_width/2, 0, hex_center_z])
-            rotate([0, 90, 0])
-                hex_grid(mid_height - 20, total_depth - 20, hex_r, wall + 2);
-
-        // --- Stone grooves on front face ---
-        translate([0, -total_depth/2, 0])
-            stone_groove_texture(total_width - chamfer*2, total_height, 0, groove_depth);
-
-        // --- Stone grooves on left side ---
-        translate([-total_width/2, 0, 0])
-            rotate([0, 0, 90])
-                stone_groove_texture(total_depth - chamfer*2, total_height, 0, groove_depth);
-
-        // --- Base mount holes ---
-        base_mount_holes();
-
-        // --- RPi compartment alignment pins (recesses) ---
-        rz = base_height + rpi_floor;
-        // Snap fit notches on split face
-        for (nz = [rz + 10, rz + 40, rz + 80]) {
-            translate([-total_width/4, 0, nz])
-                rotate([90, 0, 0])
-                    cylinder(d = 3, h = 6, $fn = 16, center = true);
-        }
-
-        // --- M3 shell-joining screw holes on split face ---
-        for (jz = [20, 80, 150, 230, 280]) {
-            translate([0, 0, jz])
-                rotate([90, 0, 0])
-                    cylinder(d = 3.4, h = total_depth + 2, $fn = 16, center = true);
-        }
-
-        // --- Camera bracket pocket at top ---
-        translate([-camera_pcb_w/2 - 3, -total_depth/2 + wall, cam_center_z - camera_pcb_h/2 - 3])
-            cube([camera_pcb_w + 6, camera_pcb_thick + 3, camera_pcb_h + 6]);
+        // Split seam groove (cosmetic, makes the split line clean)
+        translate([0, 0.5, total_h / 2])
+            cube([total_w + 2, 1, total_h + 2], center=true);
     }
 }
 
 // ============================================================
-// MODULE: back_shell
-// Back half of the main enclosure body (Y > 0 half).
-// Contains: hex side vents (right side), stone grooves,
-//           RPi IO port cutout area, alignment bosses.
+// PART 2: BACK SHELL
+// The back half (negative Y side) of the main enclosure body.
 // ============================================================
 module back_shell() {
+    color("Peru", 0.92)
     difference() {
         union() {
-            // Main body (back half)
-            difference() {
-                chamfered_box_centered(total_width, total_depth, total_height, chamfer);
-                // Hollow interior
-                translate([0, 0, wall])
-                    cube([total_width - wall*2, total_depth - wall*2, total_height], center = true);
-                // Cut at split plane — keep only Y >= 0 (back half)
-                translate([-total_width/2 - 1, -total_depth/2 - 1, -1])
-                    cube([total_width + 2, total_depth/2 + 1, total_height + 2]);
+            intersection() {
+                outer_shell();
+                translate([0, -total_d / 4, total_h / 2])
+                    cube([total_w + 2, total_d / 2 + 0.01, total_h + 2],
+                         center=true);
             }
-            // Alignment bosses on split face
-            for (jz = [20, 80, 150, 230, 280]) {
-                translate([0, 0, jz])
-                    rotate([90, 0, 0])
-                        difference() {
-                            cylinder(d = mount_boss_dia, h = 4, $fn = 20, center = true);
-                            cylinder(d = 3.4, h = 6, $fn = 16, center = true);
-                        }
+            intersection() {
+                union() {
+                    section_cable();
+                    section_rpi();
+                    // Back shell gets no camera features
+                }
+                translate([0, -total_d / 4, total_h / 2])
+                    cube([total_w + 2, total_d / 2, total_h + 2],
+                         center=true);
             }
         }
-        // --- Hex vent grilles on right side wall ---
-        hex_center_z = base_height + mid_height/2;
-        translate([total_width/2, 0, hex_center_z])
-            rotate([0, -90, 0])
-                hex_grid(mid_height - 20, total_depth - 20, hex_r, wall + 2);
+        section_cable_cuts();
+        section_rpi_cuts();
+        section_camera_cuts();
 
-        // --- Hex vent grilles on back face ---
-        translate([0, total_depth/2, hex_center_z])
+        // Alignment pin HOLES on back shell mating surface
+        for (pz = [
+            cable_h + 20,
+            cable_h + rpi_h / 2,
+            cable_h + rpi_h - 20
+        ]) {
+            translate([0, 0, pz])
             rotate([90, 0, 0])
-                hex_grid(total_width - 20, mid_height - 20, hex_r, wall + 2);
-
-        // --- Stone grooves on back face ---
-        translate([0, total_depth/2, 0])
-            mirror([0, 1, 0])
-                stone_groove_texture(total_width - chamfer*2, total_height, 0, groove_depth);
-
-        // --- Stone grooves on right side ---
-        translate([total_width/2, 0, 0])
-            rotate([0, 0, -90])
-                stone_groove_texture(total_depth - chamfer*2, total_height, 0, groove_depth);
-
-        // --- Base mount holes ---
-        base_mount_holes();
-
-        // --- RPi USB/Ethernet port cutout on back face ---
-        rz = base_height + rpi_floor;
-        translate([0, total_depth/2 - 1, rz + 5])
-            cube([75, wall + 5, 20], center = false);
-
-        // --- M3 shell-joining screw holes ---
-        for (jz = [20, 80, 150, 230, 280]) {
-            translate([0, 0, jz])
-                rotate([90, 0, 0])
-                    cylinder(d = 3.4, h = total_depth + 2, $fn = 16, center = true);
+                cylinder(d=3.2, h=total_d / 2 + 2);
+            translate([total_w / 2 - 18, 0, pz])
+            rotate([90, 0, 0])
+                cylinder(d=3.2, h=total_d / 2 + 2);
+            translate([-(total_w / 2 - 18), 0, pz])
+            rotate([90, 0, 0])
+                cylinder(d=3.2, h=total_d / 2 + 2);
         }
     }
 }
 
 // ============================================================
-// MODULE: assembly
-// Preview all parts in their assembled positions.
+// PART 3: CAMERA BRACKET
+// Separate printable bracket that cradles the Pi Camera V3 PCB
+// and clips into the front shell pocket.
+// Print flat (Z as shown).
 // ============================================================
-module assembly() {
-    color("SaddleBrown", 0.9)   front_shell();
-    color("Peru",        0.9)   back_shell();
-    color("Sienna",      0.85)  cable_cover();
-    // Camera bracket shown in position
-    cam_center_z = base_height + mid_height + top_height/2 + 5;
-    color("DimGray", 0.95)
-        translate([0, -total_depth/2 + wall + camera_pcb_thick/2 + 1, cam_center_z])
-            rotate([90, 0, 0])
-                camera_bracket();
+module camera_bracket() {
+    color("DarkSlateGray", 0.95)
+    difference() {
+        union() {
+            // Base retention plate
+            cube([cam_pcb_w + 8, cam_pcb_d + 8, 3], center=true);
+
+            // Side clamping wings
+            for (sx = [-1, 1]) {
+                translate([sx * (cam_pcb_w / 2 + 2.5), 0, 4.5])
+                    cube([5, cam_pcb_d + 8, 6], center=true);
+            }
+
+            // Lens alignment collar (ring around lens hole)
+            translate([0, 0, 5.5])
+            difference() {
+                cylinder(d=cam_lens_d + 8, h=4);
+                cylinder(d=cam_lens_d + 0.2, h=5);
+            }
+        }
+
+        // PCB seating recess (1.8 mm deep, slightly oversize)
+        translate([0, 0, 3 - rpi_pcb_t / 2])
+            cube([cam_pcb_w + 0.3, cam_pcb_d + 0.3, rpi_pcb_t + 0.5],
+                 center=true);
+
+        // Lens through-hole
+        cylinder(d=cam_lens_d, h=12, center=true);
+
+        // M2 mounting holes (for attachment to snap posts)
+        for (sx = [-1, 1]) {
+            translate([sx * (cam_pcb_w / 2 + 3), 0, 0])
+                cylinder(d=2.2, h=10, center=true, $fn=16);
+        }
+
+        // Ribbon cable exit slot at bottom
+        translate([0, -(cam_pcb_d / 2 + 2), 0])
+            cube([9, 6, 8], center=true);
+    }
 }
 
 // ============================================================
-// RENDER CONTROL
+// PART 4: CABLE COVER
+// Snap-on decorative cover for the bottom cable management
+// section. Slides over the base of the enclosure.
+// Matches the same stone groove aesthetic.
 // ============================================================
-if (PART == "assembly") {
-    assembly();
-} else if (PART == "front_shell") {
-    // Orient for printing: split face down
-    rotate([90, 0, 0])
-        front_shell();
-} else if (PART == "back_shell") {
-    // Orient for printing: split face down
-    rotate([-90, 0, 0])
-        back_shell();
-} else if (PART == "camera_bracket") {
-    camera_bracket();
-} else if (PART == "cable_cover") {
-    cable_cover();
-} else {
-    // Default: show assembly
-    assembly();
+module cable_cover() {
+    color("Sienna", 0.92)
+    difference() {
+        union() {
+            // Outer shell (slightly undersize for fitment clearance)
+            translate([0, 0, cable_h / 2])
+                chamfered_box(
+                    total_w - 0.6,
+                    total_d - 0.6,
+                    cable_h,
+                    chamfer - 0.5
+                );
+
+            // Snap-fit retention tabs (4 sides, near top edge)
+            for (rot = [0, 90, 180, 270]) {
+                rotate([0, 0, rot])
+                translate([total_w / 2 - wall_t - 0.8, 0,
+                           cable_h - 10])
+                    cube([wall_t, 10, 6], center=true);
+            }
+        }
+
+        // Hollow interior
+        translate([0, 0, wall_t + (cable_h - wall_t) / 2 + wall_t / 2])
+            cube([
+                total_w - 2 * wall_t - 0.6,
+                total_d - 2 * wall_t - 0.6,
+                cable_h
+            ], center=true);
+
+        // Match cable exit slots — front face
+        slot_sp = cable_slot_w + 8;
+        for (i = [-(num_slots - 1) / 2 : (num_slots - 1) / 2]) {
+            translate([
+                i * slot_sp,
+                (total_d - 0.6) / 2,
+                wall_t + cable_slot_h / 2
+            ])
+            cube([cable_slot_w, wall_t + 2, cable_slot_h], center=true);
+        }
+
+        // Match cable exit slot — back face
+        translate([0, -(total_d - 0.6) / 2, wall_t + cable_slot_h / 2])
+            cube([cable_slot_w * 2, wall_t + 2, cable_slot_h], center=true);
+
+        // M4 clearance holes at base corners
+        for (sx = [-1, 1]) for (sy = [-1, 1]) {
+            translate([
+                sx * (total_w / 2 - m4_inset_x),
+                sy * (total_d / 2 - m4_inset_y),
+                -1
+            ])
+            cylinder(d=m4_d + 1, h=m4_boss_h + wall_t + 2);
+        }
+
+        // Stone groove texture on cable cover faces
+        // Front
+        translate([0, (total_d - 0.6) / 2, cable_h / 2])
+            stone_grooves_xz(total_w, cable_h,
+                             groove_d, groove_w, groove_step);
+        // Back
+        translate([0, -(total_d - 0.6) / 2, cable_h / 2])
+        rotate([0, 0, 180])
+            stone_grooves_xz(total_w, cable_h,
+                             groove_d, groove_w, groove_step);
+        // Left
+        translate([-(total_w - 0.6) / 2, 0, cable_h / 2])
+        rotate([0, 0, -90])
+            stone_grooves_xz(total_d, cable_h,
+                             groove_d, groove_w, groove_step);
+        // Right
+        translate([(total_w - 0.6) / 2, 0, cable_h / 2])
+        rotate([0, 0, 90])
+            stone_grooves_xz(total_d, cable_h,
+                             groove_d, groove_w, groove_step);
+    }
 }
+
+// ============================================================
+// ============================================================
+//                   RENDER DISPATCHER
+// ============================================================
+// ============================================================
+
+// Print useful dimension summary to the OpenSCAD console
+echo("======================================");
+echo("DEFENDER Stone Pillar Enclosure — FYP");
+echo("======================================");
+echo(str("Outer dims : ", total_w, " W x ", total_d, " D x ", total_h, " H mm"));
+echo(str("Wall       : ", wall_t, " mm  |  Chamfer: ", chamfer, " mm"));
+echo(str("Sections   : Cable 0-", cable_h,
+         "  RPi ", cable_h, "-", cable_h + rpi_h,
+         "  Camera ", cable_h + rpi_h, "-", total_h));
+echo(str("Current PART = ", PART,
+         "  (0=Assembly, 1=Front, 2=Back, 3=CamBracket, 4=CableCover)"));
+
+if (PART == 0) {
+    // Assembly overview — parts spread out for visual inspection
+    translate([0, 0, 0])
+    difference() {
+        union() {
+            outer_shell();
+            section_cable();
+            section_rpi();
+            section_camera();
+        }
+        section_cable_cuts();
+        section_rpi_cuts();
+        section_camera_cuts();
+    }
+    // Camera bracket shown to the right
+    translate([total_w + 20, 0, 10])
+        camera_bracket();
+    // Cable cover shown to the left
+    translate([-(total_w + 20), 0, 0])
+        cable_cover();
+
+} else if (PART == 1) {
+    front_shell();
+
+} else if (PART == 2) {
+    back_shell();
+
+} else if (PART == 3) {
+    // Camera bracket oriented flat on print bed
+    camera_bracket();
+
+} else if (PART == 4) {
+    cable_cover();
+}
+
+// ============================================================
+// END OF FILE — defender_pillar_enclosure.scad
+// ============================================================
+//
+// SLICING / PRINT NOTES:
+// -------------------------------------------------------
+// Front Shell  : Print upright. Supports needed under visor
+//                overhang and fan cutout overhangs.
+//                Recommended: PETG or ASA, 3 perimeters,
+//                25% gyroid infill, 0.2 mm layer height.
+//
+// Back Shell   : Print upright. Minimal supports needed.
+//                Same material / settings as front shell.
+//
+// Camera Bracket: Print flat (as drawn). No supports needed.
+//                 PLA or PETG, 4 perimeters, 40% infill.
+//
+// Cable Cover  : Print upright (open end up).
+//                Same settings as main shells.
+//
+// ASSEMBLY ORDER:
+//   1. Mount RPi4 onto standoffs inside back shell (M2.5 screws).
+//   2. Feed all cables through cable trunking section.
+//   3. Attach Pi Camera V3 to camera bracket; seat into pocket.
+//   4. Join front shell to back shell (alignment pins + M3 screws
+//      through side wall threaded inserts).
+//   5. Snap cable cover onto base.
+//   6. Mount assembly to pole/wall with 4x M4 bolts through base.
+//
+// MATERIAL SUGGESTION:
+//   PETG (UV resistant) or ASA for outdoor deployments.
+//   Spray paint with grey stone-effect aerosol + brown wash
+//   for authentic stone pillar appearance.
+// ============================================================
