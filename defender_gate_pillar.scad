@@ -21,24 +21,24 @@ PART = 0;
 // ============================================================
 // DIMENSI TIANG
 // ============================================================
-p_w        = 120;
-p_d        = 120;
-p_h        = 350;
-wall_t     = 5;
-cap_w      = 138;
-cap_d      = 138;
-cap_h      = 28;
-groove_step= 30;
-groove_d   = 1.2;
-groove_w   = 2.0;
+p_w        = 200;    // lebar tiang — tebal seperti gambar
+p_d        = 200;    // dalam tiang
+p_h        = 500;    // tinggi tiang — tinggi moden
+wall_t     = 6;
+cap_w      = 210;    // cap rata, sedikit lebih lebar
+cap_d      = 210;
+cap_h      = 15;     // cap nipis dan rata (flat modern)
+groove_step= 9999;   // tiada groove — permukaan licin
+groove_d   = 0;
+groove_w   = 0;
 
 // ============================================================
 // PANEL INTERCOM (muka hadapan tiang kiri)
 // ============================================================
-panel_w    = 80;
-panel_h    = 160;
-panel_t    = 14;     // tebal panel (cukup untuk pemasangan dalaman)
-panel_z    = 160;    // ketinggian pangkal panel dari tanah
+panel_w    = 90;
+panel_h    = 180;
+panel_t    = 14;
+panel_z    = 180;    // lebih tinggi ikut tiang besar
 panel_r    = 4;
 
 // ============================================================
@@ -97,7 +97,7 @@ fan_z      = 28;     // ketinggian pusat fan dari lantai kotak
 rpi_base_z = box_wall + 5;   // aras PCB RPi4 dari lantai kotak
 
 // Pillar spacing
-pillar_sep = 200;
+pillar_sep = 300;    // jarak antara tiang lebih lebar (sliding gate)
 box_z      = -box_h - 20;
 
 // ============================================================
@@ -153,10 +153,8 @@ module pillar_body(w, d, h) {
 }
 
 module pillar_cap(w, d, h) {
-    hull() {
-        translate([0,0,0]) cube([w+4, d+4, 2], center=true);
-        translate([0,0,h]) cube([w,   d,   2], center=true);
-    }
+    // Flat rata — modern style seperti gambar
+    translate([0,0,h/2]) cube([w, d, h], center=true);
 }
 
 // ============================================================
@@ -427,10 +425,34 @@ module underground_lid() {
 // ============================================================
 // PERSEKITARAN (visual context)
 // ============================================================
+// Pagar bar moden (sliding gate style seperti gambar)
+module gate_bars() {
+    color("#1A1A1A", 1.0)
+    translate([0, p_d/2 - 10, 0]) {
+        bar_w   = 25;
+        bar_gap = 40;
+        gate_h  = p_h * 0.75;
+        gate_span = pillar_sep - p_w;
+        n_bars  = floor(gate_span / (bar_w + bar_gap));
+        // Rail atas
+        translate([0, 0, gate_h - 15])
+            cube([gate_span, 15, 25], center=true);
+        // Rail bawah
+        translate([0, 0, 30])
+            cube([gate_span, 15, 25], center=true);
+        // Bar menegak
+        for(i=[0:n_bars-1]) {
+            x = -gate_span/2 + bar_w/2 + i*(bar_w+bar_gap);
+            translate([x, 0, gate_h/2])
+                cube([bar_w, 12, gate_h], center=true);
+        }
+    }
+}
+
 module gate_wall(side) {
-    color("#222222", 1.0)
-    translate([side*(p_w/2+130), 0, p_h*0.4])
-        cube([220, p_d*0.6, p_h*0.8], center=true);
+    color("#111111", 1.0)
+    translate([side*(p_w/2+100), 0, p_h*0.38])
+        cube([180, p_d*0.5, p_h*0.75], center=true);
 }
 
 module ground() {
@@ -447,6 +469,7 @@ if (PART == 0) {
     translate([-pillar_sep/2, 0, 0])  tiang_kiri();
     translate([ pillar_sep/2, 0, 0])  tiang_kanan();
     gate_wall(-1);  gate_wall(1);
+    gate_bars();
     translate([0, 0, box_z])          underground_box();
     translate([0, 0, -20])            underground_lid();
 } else if (PART == 1) { tiang_kiri();
