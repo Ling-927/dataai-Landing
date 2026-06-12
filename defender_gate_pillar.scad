@@ -174,7 +174,7 @@ module pillar_cap(w, d, h) {
 // Contains: Camera V3 (top), LED (mid), Buzzer (low)
 // ============================================================
 module intercom_panel() {
-    color("DarkSlateGray", 0.95)
+    color("#3A4A55", 1.0)
     difference() {
         union() {
             // Panel body with rounded corners
@@ -241,7 +241,7 @@ module intercom_panel() {
 // TIANG KIRI — Camera + Intercom Panel
 // ============================================================
 module tiang_kiri() {
-    color("WhiteSmoke", 0.97)
+    color("#8A9BA8", 1.0)
     union() {
         difference() {
             union() {
@@ -286,7 +286,7 @@ module tiang_kiri() {
 // TIANG KANAN — Clean Pillar (no panel)
 // ============================================================
 module tiang_kanan() {
-    color("WhiteSmoke", 0.97)
+    color("#8A9BA8", 1.0)
     difference() {
         union() {
             pillar_body(p_w, p_d, p_h);
@@ -305,7 +305,7 @@ module tiang_kanan() {
 // UNDERGROUND BOX — RPi4 + Dual 40mm Fan
 // ============================================================
 module underground_box() {
-    color("Gray", 0.85)
+    color("#4A5560", 1.0)
     difference() {
         union() {
             translate([0,0,box_h/2])
@@ -372,7 +372,7 @@ module underground_box() {
 }
 
 module underground_lid() {
-    color("Gray", 0.8)
+    color("#404F5A", 1.0)
     difference() {
         union() {
             translate([0,0,box_lid_h/2])
@@ -397,14 +397,14 @@ module underground_lid() {
 // WALL SEGMENT (visual reference — gate wall)
 // ============================================================
 module gate_wall_segment(side) {
-    color("Gainsboro", 0.6)
+    color("#7A8A8F", 0.9)
     translate([side*(p_w/2 + 120), 0, p_h*0.4])
         cube([200, p_d*0.6, p_h*0.8], center=true);
 }
 
 // Ground plane
 module ground() {
-    color("BurlyWood", 0.35)
+    color("#6B5A3E", 0.8)
     translate([0, 30, -10])
         cube([600, 300, 12], center=true);
 }
