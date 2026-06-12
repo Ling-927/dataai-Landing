@@ -1,116 +1,125 @@
 // ============================================================
 // DEFENDER — Gate Pillar System (Tiang Pagar Moden)
-// Inspired by: modern concrete gate pillars
-// Tiang 1 (Kiri) : Pi Camera V3 + Panel (Intercom-style)
-// Tiang 2 (Kanan): Clean pillar (mirror)
-// Underground Box: RPi4 + Dual Fan
+// Tiang 1 (Kiri) : Pi Camera V3 dalaman + Panel Intercom
+// Tiang 2 (Kanan): Buzzer + LED
+// Underground Box : RPi4 + Dual 40mm Fan + lubang kabel lengkap
 // ============================================================
-// Pi Camera V3: PCB 25x24mm, lens 7.4mm dia
-// RPi4: PCB 85x56mm, standoff hole pattern 58x49mm
+// Pi Camera V3 : PCB 25x24mm, lens 7.4mm, FPC 16mm lebar
+// RPi4         : PCB 85x56mm, standoff 58x49mm
 // ============================================================
 $fn = 64;
 
-// ============================================================
 // PART SELECTOR
-// 0 = Full scene (both pillars + underground box + ground)
-// 1 = Tiang Kiri  (Camera + Panel pillar)
-// 2 = Tiang Kanan (Clean pillar)
-// 3 = Underground Box
+// 0 = Full scene
+// 1 = Tiang Kiri  (kamera dalaman)
+// 2 = Tiang Kanan (buzzer + LED)
+// 3 = Underground Box (tanpa penutup)
 // 4 = Underground Box Lid
-// 5 = Intercom Panel only
-// ============================================================
+// 5 = Panel Intercom sahaja
 PART = 0;
 
 // ============================================================
-// PILLAR DIMENSIONS  (concrete modern gate pillar)
+// DIMENSI TIANG
 // ============================================================
-p_w       = 120;    // Pillar body width  (X)
-p_d       = 120;    // Pillar body depth  (Y)
-p_h       = 350;    // Pillar body height (Z)  — excludes cap
-wall_t    = 5;      // Wall thickness
-
-// Cap (wider flat slab on top)
-cap_w     = 138;    // Cap width
-cap_d     = 138;    // Cap depth
-cap_h     = 28;     // Cap height
-
-// Horizontal groove lines (simulate concrete block joints)
-groove_step = 30;   // Spacing between grooves
-groove_d    = 1.2;  // Groove depth
-groove_w    = 2.0;  // Groove width
+p_w        = 120;
+p_d        = 120;
+p_h        = 350;
+wall_t     = 5;
+cap_w      = 138;
+cap_d      = 138;
+cap_h      = 28;
+groove_step= 30;
+groove_d   = 1.2;
+groove_w   = 2.0;
 
 // ============================================================
-// INTERCOM PANEL DIMENSIONS (left pillar front face)
+// PANEL INTERCOM (muka hadapan tiang kiri)
 // ============================================================
-panel_w   = 80;     // Panel width
-panel_h   = 160;    // Panel height
-panel_t   = 12;     // Panel protrusion from face
-panel_z   = 160;    // Panel base height from ground
-panel_r   = 4;      // Panel corner radius
+panel_w    = 80;
+panel_h    = 160;
+panel_t    = 14;     // tebal panel (cukup untuk pemasangan dalaman)
+panel_z    = 160;    // ketinggian pangkal panel dari tanah
+panel_r    = 4;
 
 // ============================================================
-// PI CAMERA V3 — ACTUAL MEASUREMENTS
+// PI CAMERA V3 — UKURAN SEBENAR
+// Kamera dipasang DALAM panel, tiada tonjolan luar
 // ============================================================
-cam_pcb_w  = 25;
-cam_pcb_d  = 24;
-cam_lens_d = 7.4;
-cam_fpc_w  = 16;
-cam_fpc_t  = 2;
-// Camera position inside panel (from panel bottom)
-cam_z_in_panel = 148;   // maksimum atas panel — tinggi untuk sudut turun lebih tajam
-cam_tilt   = 35;         // downward tilt untuk tangkap no. plate kenderaan (optimal 30-40deg)
+cam_pcb_w  = 25.0;   // lebar PCB sebenar
+cam_pcb_d  = 24.0;   // dalam PCB sebenar
+cam_pcb_t  = 1.0;    // tebal PCB
+cam_lens_d = 7.4;    // diameter lubang lens
+cam_fpc_w  = 16.0;   // lebar ribbon FPC
+cam_fpc_t  = 2.5;    // slot FPC
+cam_stoff  = 4.0;    // ketinggian standoff dalaman
+cam_tilt   = 35;     // sudut bawah untuk tangkap no. plate
+cam_z      = 148;    // ketinggian kamera dalam panel (dari bawah panel)
 
 // ============================================================
-// BUZZER — 12mm passive buzzer (actual)
+// BUZZER — 12mm pasif (ukuran sebenar)
 // ============================================================
 buzz_d     = 12.5;
-buzz_z_in_panel = 60;    // height inside panel
+buzz_z     = 60;
 
 // ============================================================
-// LED — 5mm LED
+// LED — 5mm
 // ============================================================
 led_d      = 5.2;
-led_z_in_panel = 85;     // height inside panel
+led_z      = 88;
 
 // ============================================================
 // UNDERGROUND BOX — RPi4 + Dual Fan
+// Semua lubang kabel mengikut port RPi4 sebenar
 // ============================================================
-box_w     = 180;
-box_d     = 120;
-box_h     = 90;
-box_wall  = 5;
-box_lid_h = 8;
-rpi_mnt_x = 58 / 2;
-rpi_mnt_y = 49 / 2;
-fan_r     = 17;
-fan_screw = 3.2;
+box_w      = 190;    // lebar
+box_d      = 130;    // dalam
+box_h      = 95;     // tinggi
+box_wall   = 5;
+box_lid_h  = 8;
 
-// Scene spacing
-pillar_sep = 200;   // centre-to-centre distance
-box_z      = -box_h - 20;  // underground box Z (below ground)
+// RPi4 standoff pattern (mm dari tengah)
+rpi_mnt_x  = 29.0;   // 58mm / 2
+rpi_mnt_y  = 24.5;   // 49mm / 2
+rpi_ox     = -28;    // offset RPi ke kiri — bagi ruang fan
+
+// Fan 40mm
+fan_r      = 17;
+fan_screw  = 3.2;
+fan_z      = 28;     // ketinggian pusat fan dari lantai kotak
+
+// Port RPi4 (ukuran sebenar, pada muka belakang kotak)
+// USB-A x2 (stacked): 32mm lebar x 16mm tinggi
+// USB-C power: 10mm lebar x 4mm tinggi (atau grommet bulat)
+// micro-HDMI x2: 12mm x 5mm setiap satu
+// Ethernet: 17mm x 14mm
+// GPIO: 52mm x 5mm
+// 3.5mm jack: lubang bulat 7mm
+rpi_base_z = box_wall + 5;   // aras PCB RPi4 dari lantai kotak
+
+// Pillar spacing
+pillar_sep = 200;
+box_z      = -box_h - 20;
 
 // ============================================================
-// UTILITIES
+// UTILITY MODULES
 // ============================================================
 
-module groove_lines(face_w, face_h, dep, gw, step) {
-    num = floor(face_h / step);
-    for (i = [1:num]) {
-        translate([0, -dep/2, i*step - face_h/2])
-            cube([face_w + 2, dep, gw], center=true);
-    }
+module groove_lines(fw, fh, dep, gw, step) {
+    n = floor(fh / step);
+    for (i=[1:n])
+        translate([0, -dep/2, i*step - fh/2])
+            cube([fw+2, dep, gw], center=true);
 }
 
 module rounded_box(w, d, h, r) {
-    // Box with rounded vertical edges only
-    hull() {
+    hull()
         for (sx=[-1,1]) for (sy=[-1,1])
             translate([sx*(w/2-r), sy*(d/2-r), 0])
                 cylinder(r=r, h=h, $fn=32);
-    }
 }
 
 module hex_prism(r, h) { cylinder(r=r, h=h, $fn=6); }
+
 module hex_grid(cols, rows, r, gap, depth) {
     sx = r*2+gap; sy = r*sqrt(3)+gap;
     for (row=[0:rows-1]) for (col=[0:cols-1]) {
@@ -122,271 +131,293 @@ module hex_grid(cols, rows, r, gap, depth) {
 
 module fan_hole(wt) {
     cylinder(r=fan_r, h=wt+2, center=true);
-    co = 40/2 - 4;
+    co = 18;
     for (sx=[-1,1]) for (sy=[-1,1])
         translate([sx*co, sy*co, 0])
             cylinder(d=fan_screw, h=wt+2, center=true, $fn=16);
 }
 
 // ============================================================
-// PILLAR BODY — hollow concrete block style
+// PILLAR BODY
 // ============================================================
 module pillar_body(w, d, h) {
     difference() {
-        // Outer solid
-        translate([0,0,h/2])
-            cube([w, d, h], center=true);
-
-        // Hollow interior
-        translate([0,0,wall_t + h/2])
-            cube([w-2*wall_t, d-2*wall_t, h], center=true);
-
-        // Horizontal groove lines — all 4 faces
-        // Front (+Y)
-        translate([0, d/2, h/2])
-            groove_lines(w, h, groove_d, groove_w, groove_step);
-        // Back (-Y)
-        translate([0, -d/2, h/2])
-        rotate([0,0,180])
-            groove_lines(w, h, groove_d, groove_w, groove_step);
-        // Left (-X)
-        translate([-w/2, 0, h/2])
-        rotate([0,0,-90])
-            groove_lines(d, h, groove_d, groove_w, groove_step);
-        // Right (+X)
-        translate([w/2, 0, h/2])
-        rotate([0,0,90])
-            groove_lines(d, h, groove_d, groove_w, groove_step);
+        translate([0,0,h/2]) cube([w,d,h], center=true);
+        translate([0,0,wall_t+h/2]) cube([w-2*wall_t, d-2*wall_t, h], center=true);
+        // Groove lines 4 muka
+        translate([0, d/2, h/2])  groove_lines(w,h,groove_d,groove_w,groove_step);
+        translate([0,-d/2, h/2])  rotate([0,0,180]) groove_lines(w,h,groove_d,groove_w,groove_step);
+        translate([-w/2,0, h/2])  rotate([0,0,-90]) groove_lines(d,h,groove_d,groove_w,groove_step);
+        translate([ w/2,0, h/2])  rotate([0,0, 90]) groove_lines(d,h,groove_d,groove_w,groove_step);
     }
 }
 
-// Flat cap on top of pillar (overhangs on all sides)
 module pillar_cap(w, d, h) {
-    // Lower chamfer lip
     hull() {
         translate([0,0,0]) cube([w+4, d+4, 2], center=true);
-        translate([0,0,h]) cube([w, d, 2], center=true);
+        translate([0,0,h]) cube([w,   d,   2], center=true);
     }
 }
 
 // ============================================================
-// INTERCOM PANEL — mounts flush on pillar front face
-// Contains: Camera V3 (top), LED (mid), Buzzer (low)
+// PANEL INTERCOM
+// Kamera V3 dipasang DALAM panel dengan bracket sudut tetap
+// Tiada tonjolan luar — hanya lubang lens pada muka hadapan
 // ============================================================
 module intercom_panel() {
-    color("#3A4A55", 1.0)
+    color("black", 1.0)
     difference() {
         union() {
-            // Panel body with rounded corners
+            // Badan panel
             translate([0, 0, panel_h/2])
                 rounded_box(panel_w, panel_t, panel_h, panel_r);
 
-            // Camera housing bump (protruding lens housing)
-            translate([0, panel_t/2, cam_z_in_panel])
-            rotate([-cam_tilt, 0, 0])
-                cylinder(d=cam_lens_d+12, h=8, $fn=32);
+            // Bracket dalaman kamera (rak condong 35°)
+            // Bracket ini memegang PCB V3 pada sudut yang betul
+            translate([0, panel_t/2 - cam_pcb_t - cam_stoff - 1, cam_z])
+            rotate([-cam_tilt, 0, 0]) {
+                // Pelantar PCB
+                difference() {
+                    cube([cam_pcb_w+6, cam_pcb_t+cam_stoff+2, cam_pcb_d+6], center=true);
+                    cube([cam_pcb_w+0.5, cam_pcb_t+cam_stoff+4, cam_pcb_d+0.5], center=true);
+                    cylinder(d=cam_lens_d+1, h=20, center=true);
+                }
+                // 4 standoff dalaman (M2, 4mm tinggi)
+                for (sx=[-1,1]) for (sz=[-1,1])
+                    translate([sx*10, cam_stoff/2, sz*8.5])
+                    difference() {
+                        cylinder(d=3.5, h=cam_stoff, center=true);
+                        cylinder(d=2.0, h=cam_stoff+1, center=true, $fn=16);
+                    }
+            }
         }
 
-        // --- Camera lens hole (tilted downward) ---
-        translate([0, panel_t/2, cam_z_in_panel])
+        // Lubang lens pada muka hadapan panel (condong 35° ke bawah)
+        translate([0, panel_t/2, cam_z])
         rotate([-cam_tilt, 0, 0])
-        rotate([90,0,0])
-            cylinder(d=cam_lens_d, h=panel_t+10, center=true);
+        rotate([90, 0, 0])
+            cylinder(d=cam_lens_d, h=panel_t+2, center=true);
 
-        // Camera PCB pocket (behind front face)
-        translate([0, panel_t/2 - wall_t - 1, cam_z_in_panel])
-            cube([cam_pcb_w+1, 5, cam_pcb_d+1], center=true);
-
-        // FPC ribbon slot below camera
-        translate([0, panel_t/2 - 1, cam_z_in_panel - cam_pcb_d/2 - 4])
+        // Slot FPC ribbon (bawah lens, ke bawah panel)
+        translate([0, panel_t/4, cam_z - 16])
         rotate([90,0,0])
             cube([cam_fpc_w, cam_fpc_t, panel_t+2], center=true);
 
-        // --- LED hole ---
-        translate([0, 0, led_z_in_panel])
+        // Lubang LED
+        translate([0, 0, led_z])
         rotate([90,0,0])
             cylinder(d=led_d, h=panel_t+2, center=true);
 
-        // --- Buzzer hole ---
-        translate([0, 0, buzz_z_in_panel])
+        // Lubang Buzzer
+        translate([0, 0, buzz_z])
         rotate([90,0,0])
             cylinder(d=buzz_d, h=panel_t+2, center=true);
 
-        // Buzzer pin holes
+        // Pin buzzer
         for (px=[-3.5, 3.5])
-            translate([px, 0, buzz_z_in_panel - buzz_d/2 - 4])
+            translate([px, 0, buzz_z - buzz_d/2 - 5])
             rotate([90,0,0])
                 cylinder(d=1.2, h=panel_t+2, center=true, $fn=16);
 
-        // Panel mounting screw holes (4 corners)
+        // Lubang skru pasang panel (4 penjuru)
         for (sx=[-1,1]) for (sz=[-1,1])
-            translate([sx*(panel_w/2-8), 0, panel_h/2 + sz*(panel_h/2-10)])
+            translate([sx*(panel_w/2-8), 0, panel_h/2+sz*(panel_h/2-10)])
             rotate([90,0,0])
                 cylinder(d=3.2, h=panel_t+2, center=true, $fn=16);
 
-        // Cable channel (bottom of panel)
-        translate([0, 0, 8])
+        // Saluran kabel bawah panel (FPC + wayar LED/buzzer)
+        translate([0, 0, 7])
         rotate([90,0,0])
-            cube([18, 14, panel_t+2], center=true);
+            cube([22, 16, panel_t+2], center=true);
 
-        // Side vent slots (right edge)
-        for (sz=[30, 50, 70])
+        // Slot pengudaraan sisi kanan
+        for (sz=[30,50,70])
             translate([panel_w/2, 0, sz])
             rotate([90,0,90])
-                cube([3, 12, panel_t+2], center=true);
+                cube([3, 10, panel_t+2], center=true);
     }
 }
 
 // ============================================================
-// TIANG KIRI — Camera + Intercom Panel
+// TIANG KIRI — Kamera dalaman + Panel Intercom
 // ============================================================
 module tiang_kiri() {
-    color("#8A9BA8", 1.0)
-    union() {
-        difference() {
-            union() {
-                // Pillar body
-                pillar_body(p_w, p_d, p_h);
-
-                // Cap
-                translate([0, 0, p_h])
-                    pillar_cap(cap_w, cap_d, cap_h);
-
-                // Base plate (footing)
-                translate([0, 0, -8])
-                    cube([cap_w, cap_d, 8], center=true);
-
-                // Panel mounting boss (flush recess on front face)
-                translate([0, p_d/2, panel_z + panel_h/2])
-                    cube([panel_w + 2*wall_t, wall_t, panel_h + 2*wall_t],
-                         center=true);
-            }
-
-            // Panel recess cutout on front face (so panel sits flush)
-            translate([0, p_d/2 + panel_t/2 - 0.5, panel_z + panel_h/2])
-                rounded_box(panel_w + 0.5, panel_t + 1, panel_h + 0.5, panel_r);
-
-            // Cable hole through pillar (FPC to underground)
-            translate([0, 0, 30])
-                cylinder(d=22, h=60, center=true);
-
-            // Base cable exit
-            translate([0, -p_d/2, 25])
-            rotate([90,0,0])
-                cylinder(d=18, h=wall_t+2, center=true);
-        }
-
-        // Intercom panel mounted on front face
-        translate([0, p_d/2, panel_z])
-            intercom_panel();
-    }
-}
-
-// ============================================================
-// TIANG KANAN — Clean Pillar (no panel)
-// ============================================================
-module tiang_kanan() {
-    color("#8A9BA8", 1.0)
+    color("black", 1.0)
     difference() {
         union() {
             pillar_body(p_w, p_d, p_h);
-            translate([0, 0, p_h])
-                pillar_cap(cap_w, cap_d, cap_h);
-            translate([0, 0, -8])
-                cube([cap_w, cap_d, 8], center=true);
+            translate([0,0,p_h])  pillar_cap(cap_w, cap_d, cap_h);
+            translate([0,0,-8])   cube([cap_w, cap_d, 8], center=true);
+            // Recess frame untuk panel
+            translate([0, p_d/2, panel_z + panel_h/2])
+                cube([panel_w+2*wall_t, wall_t, panel_h+2*wall_t], center=true);
         }
-        // Cable hole (for future wiring)
-        translate([0, 0, 30])
-            cylinder(d=22, h=60, center=true);
+        // Recess dalam muka hadapan untuk panel duduk flush
+        translate([0, p_d/2+panel_t/2-0.5, panel_z+panel_h/2])
+            rounded_box(panel_w+0.5, panel_t+1, panel_h+0.5, panel_r);
+        // Lubang FPC + kabel turun ke bawah tanah
+        translate([0, 0, 30]) cylinder(d=24, h=60, center=true);
+        // Lubang kabel keluar bawah tiang (ke kotak bawah tanah)
+        translate([0, -p_d/2, 22]) rotate([90,0,0])
+            cylinder(d=20, h=wall_t+2, center=true);
+    }
+    // Panel pasang pada muka hadapan
+    translate([0, p_d/2, panel_z])
+        intercom_panel();
+}
+
+// ============================================================
+// TIANG KANAN — Buzzer + LED sahaja
+// ============================================================
+module tiang_kanan() {
+    color("black", 1.0)
+    difference() {
+        union() {
+            pillar_body(p_w, p_d, p_h);
+            translate([0,0,p_h])  pillar_cap(cap_w, cap_d, cap_h);
+            translate([0,0,-8])   cube([cap_w, cap_d, 8], center=true);
+        }
+        // Lubang kabel bawah
+        translate([0, 0, 30]) cylinder(d=24, h=60, center=true);
+        translate([0, -p_d/2, 22]) rotate([90,0,0])
+            cylinder(d=20, h=wall_t+2, center=true);
     }
 }
 
 // ============================================================
 // UNDERGROUND BOX — RPi4 + Dual 40mm Fan
+// Lubang kabel lengkap mengikut port RPi4 sebenar
 // ============================================================
 module underground_box() {
-    color("#4A5560", 1.0)
+    color("black", 1.0)
     difference() {
         union() {
+            // Kotak utama
             translate([0,0,box_h/2])
                 cube([box_w, box_d, box_h], center=true);
 
-            // RPi4 standoffs (actual 58x49mm mounting hole pattern)
-            rpi_ox = -25;
+            // Standoff RPi4 — 58x49mm pattern (ukuran sebenar)
             for (sx=[-1,1]) for (sy=[-1,1])
                 translate([rpi_ox+sx*rpi_mnt_x, sy*rpi_mnt_y, box_wall])
                 difference() {
                     cylinder(d=7, h=6);
-                    cylinder(d=2.8, h=7);
+                    cylinder(d=2.8, h=7);   // M2.5 tap
                 }
 
-            // Lid alignment ridge
+            // Ridge alignment untuk penutup
             translate([0,0,box_h-box_wall-2])
             difference() {
                 cube([box_w-2*box_wall-0.4, box_d-2*box_wall-0.4, box_wall+2], center=true);
-                cube([box_w-2*box_wall-5, box_d-2*box_wall-5, box_wall+5], center=true);
+                cube([box_w-2*box_wall-5,   box_d-2*box_wall-5,   box_wall+5], center=true);
             }
         }
 
-        // Hollow
+        // Kosongkan dalam
         translate([0,0,box_wall+(box_h-box_wall)/2])
             cube([box_w-2*box_wall, box_d-2*box_wall, box_h], center=true);
 
-        // Dual fan exhaust — right wall
-        fan_z = box_wall + 25;
+        // -------------------------------------------------------
+        // LUBANG KABEL — MUKA BELAKANG (port RPi4 sebenar)
+        // Origin: rpi_ox dari tengah kotak, aras = rpi_base_z
+        // -------------------------------------------------------
+
+        // USB-A x2 (stacked double) — 32mm lebar x 16mm tinggi
+        translate([rpi_ox-16, -box_d/2, rpi_base_z+16])
+            cube([32, box_wall+2, 16], center=true);
+
+        // USB-A x2 (set kedua) — sebelah USB pertama
+        translate([rpi_ox+18, -box_d/2, rpi_base_z+16])
+            cube([32, box_wall+2, 16], center=true);
+
+        // micro-HDMI port 1 — 12mm lebar x 6mm tinggi
+        translate([rpi_ox-44, -box_d/2, rpi_base_z+8])
+            cube([12, box_wall+2, 6], center=true);
+
+        // micro-HDMI port 2
+        translate([rpi_ox-30, -box_d/2, rpi_base_z+8])
+            cube([12, box_wall+2, 6], center=true);
+
+        // Ethernet RJ45 — 17mm lebar x 14mm tinggi
+        translate([rpi_ox+38, -box_d/2, rpi_base_z+14])
+            cube([17, box_wall+2, 14], center=true);
+
+        // USB-C power input RPi4 — grommet bulat 12mm
+        translate([rpi_ox-56, -box_d/2, rpi_base_z+8])
+        rotate([90,0,0])
+            cylinder(d=12, h=box_wall+2, center=true);
+
+        // 3.5mm audio jack — lubang bulat 7mm
+        translate([rpi_ox-64, -box_d/2, rpi_base_z+8])
+        rotate([90,0,0])
+            cylinder(d=7, h=box_wall+2, center=true);
+
+        // GPIO ribbon cable slot — 52mm x 5mm (atas PCB)
+        translate([rpi_ox, -box_d/2, rpi_base_z+28])
+            cube([52, box_wall+2, 6], center=true);
+
+        // -------------------------------------------------------
+        // LUBANG KUASA LUAR — Muka Belakang (bawah)
+        // Bekalan kuasa utama masuk dari sini (kabel grommet 25mm)
+        // -------------------------------------------------------
+        translate([50, -box_d/2, 20])
+        rotate([90,0,0])
+            cylinder(d=25, h=box_wall+2, center=true);
+
+        // -------------------------------------------------------
+        // LUBANG KABEL ATAS — ke tiang-tiang
+        // -------------------------------------------------------
+        // Ke tiang kiri (FPC kamera + wayar panel)
+        translate([-pillar_sep/2, 0, box_h-box_wall/2])
+            cylinder(d=25, h=box_wall+2, center=true);
+
+        // Ke tiang kanan (wayar buzzer + LED)
+        translate([pillar_sep/2, 0, box_h-box_wall/2])
+            cylinder(d=25, h=box_wall+2, center=true);
+
+        // -------------------------------------------------------
+        // DUAL 40mm FAN — muka kanan (exhaust)
+        // -------------------------------------------------------
         for (fy=[-1,1])
-            translate([box_w/2, fy*22, fan_z])
+            translate([box_w/2, fy*24, fan_z])
             rotate([0,90,0])
                 fan_hole(box_wall);
 
-        // Hex intake — left wall
+        // Hex grille intake — muka kiri
         translate([-box_w/2, 0, fan_z])
         rotate([0,-90,0])
             hex_grid(4, 3, 5, 2, box_wall);
 
-        // Cable entries top (2 pillars)
-        translate([-pillar_sep/2, 0, box_h-box_wall/2])
-            cylinder(d=24, h=box_wall+2, center=true);
-        translate([pillar_sep/2, 0, box_h-box_wall/2])
-            cylinder(d=24, h=box_wall+2, center=true);
-
-        // Power cable entry back wall
-        translate([0, -box_d/2, box_h/3])
-        rotate([90,0,0])
-            cylinder(d=18, h=box_wall+2, center=true);
-
-        // RPi4 port cutouts (back wall) — USB, HDMI, ethernet
-        rpi_ox = -25;
-        translate([rpi_ox-22, -box_d/2, box_wall+22])
-            cube([30, box_wall+2, 18], center=true);
-        translate([rpi_ox+20, -box_d/2, box_wall+18])
-            cube([40, box_wall+2, 16], center=true);
-        translate([rpi_ox-35, -box_d/2, box_wall+20])
-            cube([20, box_wall+2, 16], center=true);
-
-        // M4 mounting holes at corners
+        // -------------------------------------------------------
+        // M4 mounting bolt holes (4 penjuru bawah)
+        // -------------------------------------------------------
         for (sx=[-1,1]) for (sy=[-1,1])
             translate([sx*(box_w/2-14), sy*(box_d/2-14), -1])
                 cylinder(d=4.4, h=box_wall+2);
     }
 }
 
+// ============================================================
+// PENUTUP (LID) UNDERGROUND BOX
+// ============================================================
 module underground_lid() {
-    color("#404F5A", 1.0)
+    color("black", 1.0)
     difference() {
         union() {
             translate([0,0,box_lid_h/2])
                 cube([box_w, box_d, box_lid_h], center=true);
+            // Tab alignment
             translate([0,0,box_lid_h])
             difference() {
                 cube([box_w-2*box_wall-1, box_d-2*box_wall-1, 5], center=true);
                 cube([box_w-2*box_wall-6, box_d-2*box_wall-6, 7], center=true);
             }
         }
+        // Lubang kabel atas (sama seperti kotak)
         translate([-pillar_sep/2, 0, box_lid_h/2])
-            cylinder(d=24, h=box_lid_h+2, center=true);
+            cylinder(d=25, h=box_lid_h+2, center=true);
         translate([pillar_sep/2, 0, box_lid_h/2])
-            cylinder(d=24, h=box_lid_h+2, center=true);
+            cylinder(d=25, h=box_lid_h+2, center=true);
+        // M4 screw holes
         for (sx=[-1,1]) for (sy=[-1,1])
             translate([sx*(box_w/2-14), sy*(box_d/2-14), -1])
                 cylinder(d=4.4, h=box_lid_h+2);
@@ -394,53 +425,39 @@ module underground_lid() {
 }
 
 // ============================================================
-// WALL SEGMENT (visual reference — gate wall)
+// PERSEKITARAN (visual context)
 // ============================================================
-module gate_wall_segment(side) {
-    color("#7A8A8F", 0.9)
-    translate([side*(p_w/2 + 120), 0, p_h*0.4])
-        cube([200, p_d*0.6, p_h*0.8], center=true);
+module gate_wall(side) {
+    color("#222222", 1.0)
+    translate([side*(p_w/2+130), 0, p_h*0.4])
+        cube([220, p_d*0.6, p_h*0.8], center=true);
 }
 
-// Ground plane
 module ground() {
-    color("#6B5A3E", 0.8)
+    color("#333322", 0.9)
     translate([0, 30, -10])
-        cube([600, 300, 12], center=true);
+        cube([700, 300, 12], center=true);
 }
 
 // ============================================================
-// RENDER DISPATCHER
+// RENDER
 // ============================================================
-
 if (PART == 0) {
     ground();
-    // Left pillar (camera + panel)
     translate([-pillar_sep/2, 0, 0])  tiang_kiri();
-    // Right pillar (clean)
-    translate([pillar_sep/2,  0, 0])  tiang_kanan();
-    // Wall segments (context)
-    gate_wall_segment(-1);
-    gate_wall_segment(1);
-    // Underground box
+    translate([ pillar_sep/2, 0, 0])  tiang_kanan();
+    gate_wall(-1);  gate_wall(1);
     translate([0, 0, box_z])          underground_box();
     translate([0, 0, -20])            underground_lid();
-
-} else if (PART == 1) {
-    tiang_kiri();
-} else if (PART == 2) {
-    tiang_kanan();
-} else if (PART == 3) {
-    underground_box();
-} else if (PART == 4) {
-    underground_lid();
-} else if (PART == 5) {
-    intercom_panel();
+} else if (PART == 1) { tiang_kiri();
+} else if (PART == 2) { tiang_kanan();
+} else if (PART == 3) { underground_box();
+} else if (PART == 4) { underground_lid();
+} else if (PART == 5) { intercom_panel();
 }
 
-echo("=== DEFENDER Gate Pillar System ===");
-echo(str("Pillar  : ", p_w, "x", p_d, "x", p_h, " mm  +  cap ", cap_h, " mm"));
-echo(str("Panel   : ", panel_w, "x", panel_t, "x", panel_h, " mm  @ Z=", panel_z));
-echo(str("Cam V3  : lens ", cam_lens_d, "mm  tilt -", cam_tilt, "deg"));
-echo(str("Box     : ", box_w, "x", box_d, "x", box_h, " mm underground"));
+echo("=== DEFENDER Gate Pillar v3 ===");
+echo(str("Tiang   : ", p_w, "x", p_d, "x", p_h, "mm + cap ", cap_h, "mm"));
+echo(str("Cam V3  : PCB ", cam_pcb_w, "x", cam_pcb_d, "mm  lens ", cam_lens_d, "mm  tilt -", cam_tilt, "deg (dalaman)"));
+echo(str("Kotak   : ", box_w, "x", box_d, "x", box_h, "mm"));
 echo("PART: 0=Scene 1=TiangKiri 2=TiangKanan 3=Box 4=Lid 5=Panel");
