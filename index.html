@@ -597,6 +597,206 @@ section { padding: 80px 40px; }
   margin-bottom: 2px;
 }
 
+/* ── AI AMBASSADOR SECTION ── */
+#ambassador .section-inner { position: relative; }
+
+.ambassador-layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 64px;
+  align-items: center;
+  margin-top: 48px;
+}
+
+/* Portrait */
+.amb-portrait-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+
+.amb-portrait-outer {
+  position: relative;
+  width: 300px;
+  overflow: hidden;
+}
+
+.amb-border-anim {
+  position: absolute;
+  inset: -3px;
+  background: linear-gradient(135deg, var(--red), var(--yellow), var(--red));
+  background-size: 200% 200%;
+  animation: ambBorder 4s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+@keyframes ambBorder {
+  0%,100%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+}
+
+.amb-corner {
+  position: absolute;
+  width: 22px; height: 22px;
+  z-index: 3;
+}
+.amb-corner-tl { top: 12px; left: 12px; border-top: 2px solid var(--red); border-left: 2px solid var(--red); }
+.amb-corner-br { bottom: 12px; right: 12px; border-bottom: 2px solid var(--yellow); border-right: 2px solid var(--yellow); }
+
+.amb-portrait-img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center top;
+  filter: contrast(1.06) saturate(0.95);
+}
+
+.amb-scan {
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(232,50,10,0.6), transparent);
+  animation: ambScan 3.5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 3;
+  top: 0;
+}
+@keyframes ambScan {
+  0%{top:0%;opacity:0} 5%{opacity:1} 95%{opacity:1} 100%{top:100%;opacity:0}
+}
+
+.amb-label-tl, .amb-label-br {
+  position: absolute;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  z-index: 4;
+  padding: 3px 8px;
+}
+.amb-label-tl { top: 16px; left: 16px; color: var(--red); border-left: 1px solid var(--red); }
+.amb-label-br { bottom: 16px; right: 16px; color: var(--yellow); border-right: 1px solid var(--yellow); text-align: right; }
+
+.amb-card-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  transition: color 0.15s;
+  border-bottom: 1px solid transparent;
+}
+.amb-card-link:hover { color: var(--red); border-bottom-color: var(--red); }
+
+/* Identity side */
+.amb-mono-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--red);
+  letter-spacing: 0.15em;
+  margin-bottom: 12px;
+}
+
+.amb-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(64px, 8vw, 104px);
+  line-height: 0.9;
+  color: var(--bg);
+  letter-spacing: 0.02em;
+  margin-bottom: 16px;
+}
+
+.amb-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--yellow);
+  margin-bottom: 20px;
+}
+.amb-title-dot {
+  width: 16px; height: 2px;
+  background: var(--yellow);
+  flex-shrink: 0;
+}
+
+.amb-bio {
+  font-size: 14px;
+  line-height: 1.8;
+  color: rgba(247,243,237,0.55);
+  margin-bottom: 28px;
+  border-left: 2px solid rgba(232,50,10,0.3);
+  padding-left: 16px;
+}
+
+.amb-stats-row {
+  display: flex;
+  gap: 0;
+  margin-bottom: 24px;
+  border: 1px solid rgba(247,243,237,0.08);
+}
+.amb-mini-stat {
+  flex: 1;
+  padding: 14px 12px;
+  text-align: center;
+  border-right: 1px solid rgba(247,243,237,0.08);
+}
+.amb-mini-stat:last-child { border-right: none; }
+.amb-mini-num {
+  display: block;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  color: var(--red);
+  line-height: 1;
+}
+.amb-mini-label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: rgba(247,243,237,0.35);
+  letter-spacing: 0.06em;
+  margin-top: 4px;
+}
+
+.amb-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+.amb-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  padding: 4px 10px;
+  border: 1px solid rgba(232,50,10,0.3);
+  color: var(--red);
+  letter-spacing: 0.06em;
+  background: rgba(232,50,10,0.05);
+}
+
+.amb-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+/* BG large text decoration */
+.amb-bg-text {
+  position: absolute;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22vw;
+  color: rgba(247,243,237,0.018);
+  top: 50%;
+  right: -2%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+@media (max-width: 760px) {
+  .ambassador-layout { grid-template-columns: 1fr; gap: 36px; }
+  .amb-portrait-outer { width: 240px; }
+  .amb-portrait-wrap { align-items: flex-start; }
+  .amb-name { font-size: 72px; }
+  .amb-bg-text { display: none; }
+}
+
 /* CTA */
 #cta {
   background: var(--red);
@@ -824,6 +1024,7 @@ footer {
     <li><a href="#how">使用方式</a></li>
     <li><a href="#features">功能</a></li>
     <li><a href="#pricing">价格</a></li>
+    <li><a href="#ambassador">关于我</a></li>
     <li><a href="#contact" class="nav-cta">立即咨询</a></li>
   </ul>
 </nav>
@@ -1052,6 +1253,75 @@ footer {
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- AI AMBASSADOR -->
+<section id="ambassador" style="background: var(--dark); overflow: hidden;">
+  <div class="section-inner" style="position:relative;">
+    <div class="section-label fade-up" style="color:var(--red)">// AI 形象大使</div>
+
+    <div class="ambassador-layout fade-up">
+
+      <!-- Portrait -->
+      <div class="amb-portrait-wrap">
+        <div class="amb-portrait-outer">
+          <div class="amb-border-anim"></div>
+          <div class="amb-corner amb-corner-tl"></div>
+          <div class="amb-corner amb-corner-br"></div>
+          <img src="assets/founder-photo.png" class="amb-portrait-img" alt="Ling · DataAI AI 形象大使">
+          <div class="amb-scan"></div>
+          <div class="amb-label-tl">AI.VERIFIED</div>
+          <div class="amb-label-br">DA-001 · 2026</div>
+        </div>
+        <a href="avatar.html" class="amb-card-link" target="_blank">查看完整 AI 名片 →</a>
+      </div>
+
+      <!-- Identity -->
+      <div class="amb-identity">
+        <div class="amb-mono-label">// FOUNDER · AI AMBASSADOR</div>
+        <h2 class="amb-name">LING</h2>
+        <div class="amb-title">
+          <span class="amb-title-dot"></span>
+          DataAI 创始人 · AI 技术布道者
+        </div>
+        <p class="amb-bio">
+          马来西亚 AI 数据分析先行者，专注用 Claude AI 帮助中小企业解锁数据价值。
+          超过 500 次 Excel 智能分析交付，98% 客户满意，平均交付时间 30 秒。
+        </p>
+
+        <div class="amb-stats-row">
+          <div class="amb-mini-stat">
+            <span class="amb-mini-num">500+</span>
+            <span class="amb-mini-label">分析完成</span>
+          </div>
+          <div class="amb-mini-stat">
+            <span class="amb-mini-num">98%</span>
+            <span class="amb-mini-label">满意度</span>
+          </div>
+          <div class="amb-mini-stat">
+            <span class="amb-mini-num">30s</span>
+            <span class="amb-mini-label">极速交付</span>
+          </div>
+        </div>
+
+        <div class="amb-tags">
+          <span class="amb-tag">AI 数据分析</span>
+          <span class="amb-tag">Excel 自动化</span>
+          <span class="amb-tag">Claude AI</span>
+          <span class="amb-tag">商业智能</span>
+        </div>
+
+        <div class="amb-actions">
+          <a href="https://wa.me/60197144999" class="btn btn-primary" target="_blank" rel="noopener">💬 WhatsApp 咨询</a>
+          <a href="avatar.html" class="btn btn-outline" style="color:var(--bg);border-color:rgba(240,237,232,0.25);" target="_blank">查看 AI 名片</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Background big text -->
+    <div class="amb-bg-text">LING</div>
   </div>
 </section>
 

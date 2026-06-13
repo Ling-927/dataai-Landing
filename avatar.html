@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ling · AI 形象大使 · DataAI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080808;
+  --dark: #0e0e0e;
+  --red: #e8320a;
+  --yellow: #f5c800;
+  --white: #f0ede8;
+  --muted: #555;
+  --cyan: #00c8ff;
+  --glow-red: rgba(232,50,10,0.4);
+  --glow-yellow: rgba(245,200,0,0.3);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow-x: hidden; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Noto Sans SC', sans-serif;
+  min-height: 100vh;
+}
+
+/* ─── BACKGROUND ─── */
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+.bg-glow-1 {
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(232,50,10,0.08) 0%, transparent 70%);
+  top: -100px; left: -100px;
+  animation: bgFloat1 12s ease-in-out infinite alternate;
+}
+.bg-glow-2 {
+  position: absolute;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(245,200,0,0.06) 0%, transparent 70%);
+  bottom: -50px; right: -50px;
+  animation: bgFloat2 15s ease-in-out infinite alternate;
+}
+
+@keyframes bgFloat1 {
+  from { transform: translate(0,0); }
+  to { transform: translate(80px, 60px); }
+}
+@keyframes bgFloat2 {
+  from { transform: translate(0,0); }
+  to { transform: translate(-60px, -80px); }
+}
+
+/* Floating particles */
+.particles {
+  position: absolute;
+  inset: 0;
+}
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: particleFloat var(--d, 8s) ease-in-out infinite var(--delay, 0s);
+  opacity: 0;
+}
+@keyframes particleFloat {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: var(--op, 0.6); }
+  90% { opacity: var(--op, 0.6); }
+  100% { transform: translateY(-20vh) scale(1); opacity: 0; }
+}
+
+/* ─── MAIN LAYOUT ─── */
+.page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* Top bar */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 56px;
+  background: rgba(8,8,8,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.1em;
+  color: var(--white);
+}
+.logo span { color: var(--red); }
+
+.verified-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--yellow);
+  border: 1px solid rgba(245,200,0,0.3);
+  padding: 4px 12px;
+  letter-spacing: 0.08em;
+}
+.verified-dot {
+  width: 5px; height: 5px;
+  background: var(--yellow);
+  border-radius: 50%;
+  animation: blink 1.5s ease infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+/* ─── AMBASSADOR CARD ─── */
+.ambassador-card {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 0;
+  max-width: 960px;
+  width: 100%;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(12,12,12,0.9);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+  box-shadow:
+    0 0 80px rgba(232,50,10,0.08),
+    0 40px 120px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  animation: cardReveal 0.8s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+@keyframes cardReveal {
+  from { opacity: 0; transform: translateY(40px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ─── PORTRAIT SIDE ─── */
+.portrait-side {
+  position: relative;
+  background: #0a0a0a;
+  overflow: hidden;
+}
+
+/* Animated gradient border */
+.portrait-border {
+  position: absolute;
+  inset: 0;
+  padding: 3px;
+  background: linear-gradient(135deg, var(--red), var(--yellow), var(--red));
+  background-size: 200% 200%;
+  animation: borderShift 4s ease infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+@keyframes borderShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Corner brackets */
+.portrait-side::before,
+.portrait-side::after {
+  content: '';
+  position: absolute;
+  width: 28px; height: 28px;
+  z-index: 10;
+  pointer-events: none;
+}
+.portrait-side::before {
+  top: 16px; left: 16px;
+  border-top: 2px solid var(--red);
+  border-left: 2px solid var(--red);
+}
+.portrait-side::after {
+  bottom: 16px; right: 16px;
+  border-bottom: 2px solid var(--yellow);
+  border-right: 2px solid var(--yellow);
+}
+
+.portrait-img {
+  width: 100%;
+  height: 100%;
+  min-height: 520px;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  filter: contrast(1.08) saturate(0.95);
+}
+
+/* Scan line effect */
+.scan-line {
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(232,50,10,0) 10%,
+    rgba(232,50,10,0.7) 50%,
+    rgba(232,50,10,0) 90%,
+    transparent 100%
+  );
+  pointer-events: none;
+  animation: scanDown 3.5s ease-in-out infinite;
+  top: 0;
+}
+@keyframes scanDown {
+  0% { top: 0%; opacity: 0; }
+  5% { opacity: 1; }
+  95% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* AI labels floating on portrait */
+.portrait-labels {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+}
+.p-label {
+  position: absolute;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  backdrop-filter: blur(8px);
+}
+.p-label-tl {
+  top: 20px; left: 20px;
+  color: var(--red);
+  border-left: 1px solid var(--red);
+  animation: fadeLabel 2s ease infinite alternate;
+}
+.p-label-br {
+  bottom: 20px; right: 20px;
+  color: var(--yellow);
+  border-right: 1px solid var(--yellow);
+  text-align: right;
+  animation: fadeLabel 2s 1s ease infinite alternate;
+}
+.p-label-bl {
+  bottom: 56px; left: 20px;
+  color: rgba(255,255,255,0.4);
+  border-left: 1px solid rgba(255,255,255,0.2);
+}
+@keyframes fadeLabel {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+
+/* ─── IDENTITY SIDE ─── */
+.identity-side {
+  padding: 52px 48px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background decoration */
+.identity-side::before {
+  content: 'AI';
+  position: absolute;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 300px;
+  color: rgba(255,255,255,0.015);
+  top: -40px;
+  right: -40px;
+  line-height: 1;
+  pointer-events: none;
+  letter-spacing: -0.05em;
+}
+
+.id-section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--red);
+  letter-spacing: 0.15em;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.id-section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(232,50,10,0.3);
+}
+
+.id-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(64px, 8vw, 96px);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  color: var(--white);
+  margin-bottom: 8px;
+  animation: nameReveal 1s 0.3s cubic-bezier(0.16,1,0.3,1) both;
+}
+@keyframes nameReveal {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.id-name-en {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  margin-bottom: 24px;
+}
+
+.id-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--yellow);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.id-title::before {
+  content: '';
+  width: 20px; height: 2px;
+  background: var(--yellow);
+  flex-shrink: 0;
+}
+
+.id-tagline {
+  font-size: 13px;
+  color: rgba(240,237,232,0.5);
+  line-height: 1.7;
+  margin-bottom: 36px;
+  padding-left: 30px;
+  border-left: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Stats */
+.id-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.06);
+  margin-bottom: 36px;
+}
+.id-stat {
+  background: var(--dark);
+  padding: 16px 14px;
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  color: var(--red);
+  line-height: 1;
+  display: block;
+}
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+  display: block;
+}
+
+/* Skills / tags */
+.id-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 36px;
+}
+.id-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 4px 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(240,237,232,0.6);
+  letter-spacing: 0.06em;
+  transition: all 0.2s;
+}
+.id-tag:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+.id-tag.hot {
+  border-color: rgba(232,50,10,0.4);
+  color: var(--red);
+  background: rgba(232,50,10,0.05);
+}
+
+/* Social links */
+.id-socials {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  text-decoration: none;
+  color: var(--white);
+  transition: all 0.2s;
+}
+.social-link:hover {
+  border-color: var(--red);
+  background: rgba(232,50,10,0.05);
+  transform: translateX(4px);
+}
+.social-icon {
+  width: 32px; height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.social-info { flex: 1; }
+.social-platform {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  display: block;
+}
+.social-handle {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--white);
+  margin-top: 2px;
+  display: block;
+}
+.social-arrow {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Footer of identity side */
+.id-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.id-brand {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.1em;
+}
+.id-brand span { color: var(--red); }
+
+.id-location {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.id-location::before { content: '📍'; font-size: 12px; }
+
+/* ─── DATA STREAM LINES (decorative) ─── */
+.data-streams {
+  position: fixed;
+  top: 0; right: 0;
+  width: 2px;
+  height: 100vh;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.data-stream {
+  position: absolute;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(232,50,10,0.4), transparent);
+  animation: streamFall var(--sd, 4s) linear infinite var(--ss, 0s);
+}
+@keyframes streamFall {
+  from { top: -30%; height: 30%; }
+  to { top: 130%; height: 30%; }
+}
+
+/* ─── BOTTOM CTA ─── */
+.bottom-cta {
+  margin-top: 40px;
+  text-align: center;
+  animation: cardReveal 0.8s 0.3s cubic-bezier(0.16,1,0.3,1) both;
+}
+.cta-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  margin-bottom: 20px;
+}
+.cta-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.cta-btn {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 12px 28px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  letter-spacing: 0.04em;
+}
+.cta-btn-primary {
+  background: var(--red);
+  color: var(--white);
+  border: 2px solid var(--red);
+}
+.cta-btn-primary:hover {
+  background: transparent;
+  transform: translate(-2px,-2px);
+  box-shadow: 4px 4px 0 var(--red);
+}
+.cta-btn-outline {
+  background: transparent;
+  color: var(--white);
+  border: 2px solid rgba(255,255,255,0.15);
+}
+.cta-btn-outline:hover {
+  border-color: var(--white);
+  transform: translate(-2px,-2px);
+  box-shadow: 4px 4px 0 rgba(255,255,255,0.15);
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 760px) {
+  .ambassador-card {
+    grid-template-columns: 1fr;
+  }
+  .portrait-img { min-height: 360px; max-height: 420px; }
+  .identity-side { padding: 36px 28px; }
+  .id-name { font-size: 72px; }
+  .topbar { padding: 0 20px; }
+  .id-stats { grid-template-columns: repeat(3,1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- BG -->
+<div class="bg-layer">
+  <div class="bg-grid"></div>
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+  <div class="particles" id="particles"></div>
+</div>
+
+<!-- Data streams (right edge) -->
+<div class="data-streams" style="right:5%">
+  <div class="data-stream" style="--sd:6s;--ss:0s;width:1px;left:0;opacity:0.6"></div>
+</div>
+<div class="data-streams" style="right:15%;width:1px">
+  <div class="data-stream" style="--sd:8s;--ss:2s;width:1px;left:0;opacity:0.3"></div>
+</div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo">DATA<span>·AI</span></div>
+  <div class="verified-badge">
+    <div class="verified-dot"></div>
+    AI VERIFIED AMBASSADOR
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="page">
+  <div class="ambassador-card">
+
+    <!-- LEFT: PORTRAIT -->
+    <div class="portrait-side">
+      <div class="portrait-border"></div>
+      <img class="portrait-img" src="assets/founder-photo.png" alt="Ling · DataAI">
+      <div class="scan-line"></div>
+      <div class="portrait-labels">
+        <div class="p-label p-label-tl">AI.AMBASSADOR</div>
+        <div class="p-label p-label-br">DATAAI · 2026</div>
+        <div class="p-label p-label-bl">ID: DA-001</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: IDENTITY -->
+    <div class="identity-side">
+      <div>
+        <div class="id-section-label">// AI 形象大使</div>
+
+        <div class="id-name">LING</div>
+        <div class="id-name-en">AI BRAND AMBASSADOR · MALAYSIA</div>
+
+        <div class="id-title">DataAI 创始人 · AI 技术布道者</div>
+        <p class="id-tagline">
+          用 AI 技术赋能每一位数据决策者，<br>
+          让 Excel 分析从「难题」变成「30秒」。
+        </p>
+
+        <div class="id-stats">
+          <div class="id-stat">
+            <span class="stat-num">500+</span>
+            <span class="stat-label">数据分析</span>
+          </div>
+          <div class="id-stat">
+            <span class="stat-num">98%</span>
+            <span class="stat-label">客户满意</span>
+          </div>
+          <div class="id-stat">
+            <span class="stat-num">30s</span>
+            <span class="stat-label">极速交付</span>
+          </div>
+        </div>
+
+        <div class="id-tags">
+          <span class="id-tag hot">AI 数据分析</span>
+          <span class="id-tag hot">Excel 自动化</span>
+          <span class="id-tag">商业智能</span>
+          <span class="id-tag">Claude AI</span>
+          <span class="id-tag">马来西亚</span>
+        </div>
+
+        <div class="id-socials">
+          <a href="https://wa.me/60197144999" class="social-link" target="_blank" rel="noopener">
+            <div class="social-icon">💬</div>
+            <div class="social-info">
+              <span class="social-platform">WHATSAPP · 立即咨询</span>
+              <span class="social-handle">0197144999</span>
+            </div>
+            <span class="social-arrow">→</span>
+          </a>
+          <a href="https://www.facebook.com/LiNg1120" class="social-link" target="_blank" rel="noopener">
+            <div class="social-icon">📘</div>
+            <div class="social-info">
+              <span class="social-platform">FACEBOOK</span>
+              <span class="social-handle">facebook.com/LiNg1120</span>
+            </div>
+            <span class="social-arrow">→</span>
+          </a>
+          <a href="https://www.tiktok.com/@lingling9999lingling" class="social-link" target="_blank" rel="noopener">
+            <div class="social-icon">🎵</div>
+            <div class="social-info">
+              <span class="social-platform">TIKTOK · AI 内容创作</span>
+              <span class="social-handle">@lingling9999lingling</span>
+            </div>
+            <span class="social-arrow">→</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="id-footer">
+        <div class="id-brand">DATA<span>·AI</span></div>
+        <div class="id-location">Kuala Lumpur, Malaysia</div>
+      </div>
+    </div>
+
+  </div><!-- /.ambassador-card -->
+
+  <div class="bottom-cta">
+    <p class="cta-text">// 与 AI 形象大使合作 · COLLABORATE WITH AI AMBASSADOR</p>
+    <div class="cta-buttons">
+      <a href="https://wa.me/60197144999" class="cta-btn cta-btn-primary" target="_blank" rel="noopener">→ WhatsApp 联系合作</a>
+      <a href="index.html" class="cta-btn cta-btn-outline">← 返回官网</a>
+    </div>
+  </div>
+
+</div><!-- /.page -->
+
+<script>
+/* Generate floating particles */
+const container = document.getElementById('particles');
+const colors = ['#e8320a', '#f5c800', 'rgba(255,255,255,0.4)'];
+for (let i = 0; i < 30; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const size = Math.random() * 3 + 1;
+  p.style.cssText = `
+    width: ${size}px;
+    height: ${size}px;
+    left: ${Math.random() * 100}%;
+    background: ${colors[Math.floor(Math.random() * colors.length)]};
+    --d: ${6 + Math.random() * 10}s;
+    --delay: -${Math.random() * 12}s;
+    --op: ${0.3 + Math.random() * 0.5};
+  `;
+  container.appendChild(p);
+}
+
+/* Animated stat counters */
+document.querySelectorAll('.stat-num').forEach(el => {
+  const target = el.textContent;
+  const num = parseFloat(target);
+  if (isNaN(num)) return;
+  const suffix = target.replace(/[\d.]/g, '');
+  let start = 0;
+  const duration = 1500;
+  const step = timestamp => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(num * ease) + suffix;
+    if (progress < 1) requestAnimationFrame(step);
+  };
+  setTimeout(() => requestAnimationFrame(step), 600);
+});
+</script>
+</body>
+</html>

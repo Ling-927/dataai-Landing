@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ling · 3D AI 形象大使 · DataAI</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+SC:wght@300;400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root {
+  --red: #e8320a;
+  --yellow: #f5c800;
+  --cyan: #00c8ff;
+  --white: #f0ede8;
+  --dark: #050508;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: var(--dark); }
+
+/* ── THREE.JS CANVAS ── */
+#three-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+/* ── SCENE ROOT ── */
+.scene {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 54px;
+  background: rgba(5,5,8,0.7);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.1em;
+  color: var(--white);
+}
+.logo span { color: var(--red); }
+
+.badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--yellow);
+  border: 1px solid rgba(245,200,0,0.35);
+  padding: 4px 12px;
+  display: flex; align-items: center; gap: 6px;
+}
+.badge-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--yellow);
+  animation: blink 1.5s ease infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.15} }
+
+/* ── AVATAR GROUP ── */
+.avatar-group {
+  position: relative;
+  width: 320px;
+  transform-style: preserve-3d;
+  transform: perspective(1200px);
+  transition: transform 0.08s linear;
+  will-change: transform;
+}
+
+/* ── BODY GLOW (behind figure) ── */
+.body-glow {
+  position: absolute;
+  width: 280px;
+  height: 500px;
+  left: 50%; top: 0;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at 50% 40%,
+    rgba(232,50,10,0.18) 0%,
+    rgba(232,50,10,0.06) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ── FIGURE ── */
+.figure-wrap {
+  position: relative;
+  z-index: 2;
+}
+
+.figure-img {
+  width: 100%;
+  display: block;
+  filter:
+    drop-shadow(0 0 30px rgba(232,50,10,0.45))
+    drop-shadow(0 0 80px rgba(232,50,10,0.15))
+    drop-shadow(0 20px 40px rgba(0,0,0,0.8))
+    contrast(1.06) saturate(1.05) brightness(1.02);
+  animation: figureFloat 6s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+@keyframes figureFloat {
+  0%,100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+/* ── GROUND GLOW (under feet) ── */
+.ground-glow {
+  position: absolute;
+  bottom: -20px; left: 50%;
+  transform: translateX(-50%);
+  width: 200px; height: 30px;
+  background: radial-gradient(ellipse, rgba(232,50,10,0.5) 0%, transparent 70%);
+  filter: blur(8px);
+}
+
+/* ── GROUND REFLECTION ── */
+.ground-reflect {
+  position: absolute;
+  bottom: -80px; left: 0; right: 0;
+  height: 80px;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, rgba(255,255,255,0.25), transparent);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(255,255,255,0.25), transparent);
+}
+.ground-reflect img {
+  width: 100%;
+  display: block;
+  transform: scaleY(-1);
+  filter: blur(3px) saturate(0.5);
+  opacity: 0.3;
+}
+
+/* ── SCAN LINE ── */
+.scan-h {
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  pointer-events: none;
+  z-index: 10;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(232,50,10,0.0) 10%,
+    rgba(232,50,10,0.8) 50%,
+    rgba(232,50,10,0.0) 90%,
+    transparent 100%
+  );
+  animation: scanDown 3.5s ease-in-out infinite;
+  top: 0;
+}
+@keyframes scanDown {
+  0%{top:0%;opacity:0} 5%{opacity:1} 95%{opacity:1} 100%{top:100%;opacity:0}
+}
+
+/* ── FACE TRACKING BRACKETS ── */
+.face-brackets {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+.bracket {
+  position: absolute;
+  width: 18px; height: 18px;
+  animation: bracketPulse 2.5s ease-in-out infinite;
+}
+@keyframes bracketPulse {
+  0%,100%{opacity:0.6} 50%{opacity:1}
+}
+
+/* face is roughly: top 6%-46%, left 22%-78% */
+.br-tl { top: 6%;  left: 22%; border-top: 1.5px solid var(--cyan); border-left: 1.5px solid var(--cyan); }
+.br-tr { top: 6%;  right:22%; border-top: 1.5px solid var(--cyan); border-right:1.5px solid var(--cyan); animation-delay:.4s; }
+.br-bl { top: 46%; left: 22%; border-bottom:1.5px solid var(--cyan); border-left: 1.5px solid var(--cyan); animation-delay:.8s; }
+.br-br { top: 46%; right:22%; border-bottom:1.5px solid var(--cyan); border-right:1.5px solid var(--cyan); animation-delay:1.2s; }
+
+/* Face data readout */
+.face-data {
+  position: absolute;
+  top: 5%; left: 22%;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  color: var(--cyan);
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+  pointer-events: none;
+  z-index: 11;
+  opacity: 0;
+  animation: fadeData 3.5s ease-in-out infinite;
+}
+@keyframes fadeData {
+  0%{opacity:0} 20%{opacity:0.8} 80%{opacity:0.8} 100%{opacity:0}
+}
+.face-data div { white-space: nowrap; }
+
+/* Corner labels on figure */
+.fig-label {
+  position: absolute;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  pointer-events: none;
+  z-index: 12;
+}
+.fig-tl { top: 10px; left: 10px; color: var(--red); border-left: 1px solid var(--red); padding-left: 6px; }
+.fig-br { bottom: 20px; right: 10px; color: var(--yellow); border-right: 1px solid var(--yellow); padding-right: 6px; text-align:right; }
+
+/* ── FLOATING NAME CARD ── */
+.name-card {
+  position: absolute;
+  right: calc(50% + 200px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 220px;
+  border: 1px solid rgba(255,255,255,0.07);
+  background: rgba(5,5,8,0.8);
+  backdrop-filter: blur(20px);
+  padding: 24px 20px;
+  animation: cardIn 1s 0.4s cubic-bezier(0.16,1,0.3,1) both;
+  transition: transform 0.12s linear;
+  will-change: transform;
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(-40%) translateX(-20px); }
+  to   { opacity: 1; transform: translateY(-50%) translateX(0); }
+}
+
+.nc-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--red);
+  letter-spacing: 0.15em;
+  margin-bottom: 10px;
+}
+.nc-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 62px;
+  line-height: 0.9;
+  color: var(--white);
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+}
+.nc-title {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--yellow);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 6px;
+}
+.nc-title::before { content:''; width:14px; height:1.5px; background:var(--yellow); flex-shrink:0; }
+.nc-divider { height: 1px; background: rgba(255,255,255,0.07); margin-bottom: 14px; }
+.nc-stats {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: rgba(240,237,232,0.4);
+  letter-spacing: 0.06em;
+  line-height: 1.9;
+}
+.nc-stats span { display: block; }
+.nc-stats span::before { content: '→ '; color: var(--red); }
+
+/* Connecting line from card to figure */
+.nc-connector {
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(232,50,10,0.4));
+}
+.nc-connector::after {
+  content: '';
+  position: absolute;
+  right: 0; top: -3px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 8px var(--red);
+  animation: connectorPulse 1.5s ease infinite;
+}
+@keyframes connectorPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ── FLOATING SOCIAL CARD ── */
+.social-card {
+  position: absolute;
+  left: calc(50% + 200px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: cardIn2 1s 0.6s cubic-bezier(0.16,1,0.3,1) both;
+  transition: transform 0.12s linear;
+  will-change: transform;
+}
+@keyframes cardIn2 {
+  from { opacity: 0; transform: translateY(-40%) translateX(20px); }
+  to   { opacity: 1; transform: translateY(-50%) translateX(0); }
+}
+
+.sc-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255,255,255,0.07);
+  background: rgba(5,5,8,0.8);
+  backdrop-filter: blur(20px);
+  text-decoration: none;
+  color: var(--white);
+  transition: border-color 0.2s, transform 0.2s;
+}
+.sc-link:hover { border-color: var(--red); transform: translateX(4px); }
+.sc-icon { font-size: 18px; flex-shrink: 0; }
+.sc-platform {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  color: rgba(240,237,232,0.35);
+  letter-spacing: 0.1em;
+  display: block;
+}
+.sc-handle {
+  font-size: 12px;
+  font-weight: 500;
+  display: block;
+  margin-top: 2px;
+  color: var(--white);
+}
+.sc-connector {
+  position: absolute;
+  left: -40px; top: 50%;
+  width: 40px; height: 1px;
+  background: linear-gradient(to left, transparent, rgba(232,50,10,0.4));
+}
+.sc-connector::before {
+  content: '';
+  position: absolute;
+  left: 0; top: -3px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 8px var(--red);
+  animation: connectorPulse 1.5s 0.8s ease infinite;
+}
+
+/* ── BOTTOM ELEMENTS ── */
+.bottom-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 48px;
+  background: rgba(5,5,8,0.7);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+.bb-brand {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  color: rgba(240,237,232,0.4);
+}
+.bb-brand span { color: var(--red); }
+.bb-links { display: flex; gap: 20px; }
+.bb-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(240,237,232,0.3);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.bb-link:hover { color: var(--white); }
+.bb-right {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: rgba(240,237,232,0.25);
+  letter-spacing: 0.06em;
+}
+
+/* ── HOLOGRAPHIC RING OVERLAY (CSS) ── */
+.css-ring {
+  position: fixed;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  pointer-events: none;
+  z-index: 0;
+}
+.css-ring-1 {
+  width: 700px; height: 700px;
+  border-color: rgba(232,50,10,0.07);
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%) rotateX(70deg);
+  animation: ringRotate1 20s linear infinite;
+}
+.css-ring-2 {
+  width: 550px; height: 550px;
+  border-color: rgba(245,200,0,0.06);
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%) rotateX(60deg) rotateZ(30deg);
+  animation: ringRotate2 28s linear infinite reverse;
+}
+@keyframes ringRotate1 { from{transform:translate(-50%,-50%) rotateX(70deg) rotateZ(0)} to{transform:translate(-50%,-50%) rotateX(70deg) rotateZ(360deg)} }
+@keyframes ringRotate2 { from{transform:translate(-50%,-50%) rotateX(60deg) rotateZ(30deg)} to{transform:translate(-50%,-50%) rotateX(60deg) rotateZ(390deg)} }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .name-card { display: none; }
+  .social-card { display: none; }
+  .avatar-group { width: 260px; }
+}
+@media (max-width: 500px) {
+  .avatar-group { width: 200px; }
+  .topbar, .bottom-bar { padding: 0 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- THREE.JS CANVAS -->
+<canvas id="three-canvas"></canvas>
+
+<!-- CSS RINGS -->
+<div class="css-ring css-ring-1"></div>
+<div class="css-ring css-ring-2"></div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo">DATA<span>·AI</span></div>
+  <div class="badge"><div class="badge-dot"></div>3D AI AMBASSADOR · LIVE</div>
+</div>
+
+<!-- MAIN SCENE -->
+<div class="scene">
+
+  <!-- NAME CARD (left) -->
+  <div class="name-card" id="name-card">
+    <div class="nc-connector"></div>
+    <div class="nc-label">// AI 形象大使</div>
+    <div class="nc-name">LING</div>
+    <div class="nc-title">DataAI 创始人</div>
+    <div class="nc-divider"></div>
+    <div class="nc-stats">
+      <span>500+ Excel 分析</span>
+      <span>98% 客户满意</span>
+      <span>30s 极速交付</span>
+      <span>KL · Malaysia</span>
+    </div>
+  </div>
+
+  <!-- AVATAR GROUP (center) -->
+  <div class="avatar-group" id="avatar-group">
+
+    <!-- Body glow behind -->
+    <div class="body-glow"></div>
+
+    <!-- Figure -->
+    <div class="figure-wrap" id="figure-wrap">
+      <img class="figure-img" id="figure-img" src="assets/founder-cutout.png" alt="Ling">
+      <div class="scan-h"></div>
+
+      <!-- Ground reflection -->
+      <div class="ground-reflect">
+        <img src="assets/founder-cutout.png" alt="">
+      </div>
+      <div class="ground-glow"></div>
+
+      <!-- Face tracking brackets -->
+      <div class="face-brackets">
+        <div class="bracket br-tl"></div>
+        <div class="bracket br-tr"></div>
+        <div class="bracket br-bl"></div>
+        <div class="bracket br-br"></div>
+      </div>
+
+      <!-- Face data readout -->
+      <div class="face-data">
+        <div>ID: LNG-001</div>
+        <div>FACE: VERIFIED ✓</div>
+        <div>AI: ACTIVE</div>
+      </div>
+
+      <!-- Corner labels -->
+      <div class="fig-label fig-tl">AI.AMBASSADOR</div>
+      <div class="fig-label fig-br">DATAAI · 2026</div>
+    </div>
+
+  </div><!-- /avatar-group -->
+
+  <!-- SOCIAL CARD (right) -->
+  <div class="social-card" id="social-card">
+    <div style="position:relative;">
+      <div class="sc-connector"></div>
+    </div>
+    <a href="https://wa.me/60197144999" class="sc-link" target="_blank" rel="noopener">
+      <span class="sc-icon">💬</span>
+      <div>
+        <span class="sc-platform">WHATSAPP</span>
+        <span class="sc-handle">0197144999</span>
+      </div>
+    </a>
+    <a href="https://www.facebook.com/LiNg1120" class="sc-link" target="_blank" rel="noopener">
+      <span class="sc-icon">📘</span>
+      <div>
+        <span class="sc-platform">FACEBOOK</span>
+        <span class="sc-handle">LiNg1120</span>
+      </div>
+    </a>
+    <a href="https://www.tiktok.com/@lingling9999lingling" class="sc-link" target="_blank" rel="noopener">
+      <span class="sc-icon">🎵</span>
+      <div>
+        <span class="sc-platform">TIKTOK</span>
+        <span class="sc-handle">@lingling9999</span>
+      </div>
+    </a>
+  </div>
+
+</div><!-- /scene -->
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+  <div class="bb-brand">DATA<span>·AI</span></div>
+  <div class="bb-links">
+    <a href="index.html" class="bb-link">官网</a>
+    <a href="avatar.html" class="bb-link">名片版</a>
+    <a href="https://wa.me/60197144999" class="bb-link" target="_blank">合作咨询</a>
+  </div>
+  <div class="bb-right">KUALA LUMPUR · MALAYSIA</div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════
+   THREE.JS — 3D Particle Environment
+═══════════════════════════════════════ */
+const canvas = document.getElementById('three-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, 0, 7);
+
+/* Particles */
+const COUNT = 3000;
+const pos = new Float32Array(COUNT * 3);
+const col = new Float32Array(COUNT * 3);
+const palette = [
+  [0.91, 0.20, 0.04], // red
+  [0.96, 0.78, 0.00], // yellow
+  [0.00, 0.78, 1.00], // cyan
+  [1.00, 1.00, 1.00], // white
+];
+for (let i = 0; i < COUNT; i++) {
+  const r = 6 + Math.random() * 12;
+  const theta = Math.random() * Math.PI * 2;
+  const phi = Math.acos(2 * Math.random() - 1);
+  pos[i*3]   = r * Math.sin(phi) * Math.cos(theta);
+  pos[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+  pos[i*3+2] = r * Math.cos(phi);
+  const c = palette[Math.floor(Math.random() * palette.length)];
+  col[i*3] = c[0]; col[i*3+1] = c[1]; col[i*3+2] = c[2];
+}
+const pGeo = new THREE.BufferGeometry();
+pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+pGeo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+const pMat = new THREE.PointsMaterial({ size: 0.05, vertexColors: true, transparent: true, opacity: 0.65 });
+const particles = new THREE.Points(pGeo, pMat);
+scene.add(particles);
+
+/* 3D Torus Rings */
+function ring(radius, tube, color, opacity) {
+  const m = new THREE.Mesh(
+    new THREE.TorusGeometry(radius, tube, 16, 200),
+    new THREE.MeshBasicMaterial({ color, transparent: true, opacity })
+  );
+  scene.add(m);
+  return m;
+}
+const r1 = ring(3.2, 0.012, 0xe8320a, 0.55);
+const r2 = ring(4.4, 0.010, 0xf5c800, 0.25);
+const r3 = ring(2.8, 0.008, 0x00c8ff, 0.35);
+const r4 = ring(5.2, 0.006, 0xe8320a, 0.15);
+r1.rotation.x = Math.PI / 3;
+r2.rotation.x = -Math.PI / 5;
+r3.rotation.x = Math.PI / 6;
+r3.rotation.y = Math.PI / 4;
+r4.rotation.x = Math.PI / 2.5;
+r4.rotation.z = Math.PI / 6;
+
+/* Grid plane (ground) */
+const gridHelper = new THREE.GridHelper(30, 40, 0x1a0800, 0x100500);
+gridHelper.position.y = -4;
+gridHelper.material.opacity = 0.4;
+gridHelper.material.transparent = true;
+scene.add(gridHelper);
+
+/* Mouse tracking */
+let mx = 0, my = 0, tmx = 0, tmy = 0;
+window.addEventListener('mousemove', e => {
+  mx = (e.clientX / window.innerWidth - 0.5) * 2;
+  my = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+
+/* Resize */
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+/* Animation */
+let t = 0;
+function animate() {
+  requestAnimationFrame(animate);
+  t += 0.006;
+
+  // Smooth mouse follow
+  tmx += (mx - tmx) * 0.04;
+  tmy += (my - tmy) * 0.04;
+
+  particles.rotation.y = t * 0.08 + tmx * 0.15;
+  particles.rotation.x = t * 0.03 + tmy * 0.08;
+
+  r1.rotation.z = t * 0.35;
+  r2.rotation.z = -t * 0.22;
+  r3.rotation.z = t * 0.45;
+  r3.rotation.x = Math.PI / 6 + Math.sin(t * 0.7) * 0.12;
+  r4.rotation.z = t * 0.15;
+
+  camera.position.x += (tmx * 0.8 - camera.position.x) * 0.05;
+  camera.position.y += (-tmy * 0.5 - camera.position.y) * 0.05;
+  camera.lookAt(scene.position);
+
+  renderer.render(scene, camera);
+}
+animate();
+
+/* ═══════════════════════════════════════
+   CSS PARALLAX — 3D Avatar Tilt
+═══════════════════════════════════════ */
+const avatarGroup = document.getElementById('avatar-group');
+const nameCard    = document.getElementById('name-card');
+const socialCard  = document.getElementById('social-card');
+
+let pmx = 0, pmy = 0;
+let pnx = 0, pny = 0;
+
+function updateParallax() {
+  // Smooth interpolation
+  pmx += (mx - pmx) * 0.07;
+  pmy += (my - pmy) * 0.07;
+  pnx += (mx - pnx) * 0.04;
+  pny += (my - pny) * 0.04;
+
+  // Main figure: tilt with perspective
+  const tiltY =  pmx * 14;
+  const tiltX = -pmy * 7;
+  avatarGroup.style.transform =
+    `perspective(1200px) rotateY(${tiltY}deg) rotateX(${tiltX}deg) translateZ(0)`;
+
+  // Cards: parallax drift opposite direction
+  const ncX = -54 + pnx * -18;
+  const ncY = -50 + pny * -10;
+  nameCard.style.transform = `translateY(${ncY}%) translateX(${ncX < -54 ? ncX : -54}px) translateX(${pnx * -18}px)`;
+
+  // Reset name card with correct base
+  nameCard.style.transform = `translateY(-50%) translateX(${pnx * -22}px) translateY(${pny * -12}px)`;
+  socialCard.style.transform = `translateY(-50%) translateX(${pnx * 18}px) translateY(${pny * 10}px)`;
+
+  requestAnimationFrame(updateParallax);
+}
+updateParallax();
+
+/* ═══════════════════════════════════════
+   Touch support (mobile parallax)
+═══════════════════════════════════════ */
+window.addEventListener('touchmove', e => {
+  if (e.touches.length) {
+    mx = (e.touches[0].clientX / window.innerWidth - 0.5) * 2;
+    my = (e.touches[0].clientY / window.innerHeight - 0.5) * 2;
+  }
+}, { passive: true });
+</script>
+</body>
+</html>
