@@ -1,0 +1,24 @@
+# ParkingGuard - Raspberry Pi 4 Config
+# Jangan ubah kecuali anda tahu apa yang dilakukan
+
+# Aktifkan kamera Pi Camera V3
+camera_auto_detect=1
+dtoverlay=camera,cam0
+
+# GPU Memory (perlukan untuk kamera)
+gpu_mem=128
+
+# Aktifkan I2C
+dtparam=i2c_arm=on
+
+# Aktifkan SPI
+dtparam=spi=on
+
+# HDMI output
+hdmi_force_hotplug=1
+
+# Overclock (opsional, selamat untuk Pi 4)
+# arm_freq=1800
+# over_voltage=4
+
+[all]
