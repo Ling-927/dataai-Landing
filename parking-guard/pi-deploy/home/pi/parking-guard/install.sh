@@ -1,6 +1,6 @@
 #!/bin/bash
 # ================================================================
-# ParkingGuard — Skrip Pemasangan Automatik untuk Raspberry Pi 4
+# I Defender — Skrip Pemasangan Automatik untuk Raspberry Pi 4
 # Jalankan: sudo bash install.sh
 # ================================================================
 
@@ -117,7 +117,7 @@ log "Kebenaran ditetapkan"
 step "LANGKAH 7/8: Wujudkan servis auto-start"
 cat > "$SERVICE_FILE" << SVCEOF
 [Unit]
-Description=ParkingGuard Pi - Sistem Pengawasan Kenderaan
+Description=I Defender Pi - Sistem Pengawasan Kenderaan
 After=network-online.target
 Wants=network-online.target
 StartLimitIntervalSec=0
@@ -205,7 +205,7 @@ echo -e "${GREEN}║         PEMASANGAN BERJAYA! ✓                ║${NC}"
 echo -e "${GREEN}╚══════════════════════════════════════════════╝${NC}"
 echo ""
 echo -e "📁 Direktori   : ${CYAN}$PI_DIR${NC}"
-echo -e "📋 Log fail    : ${CYAN}$PI_DIR/parkingguard.log${NC}"
+echo -e "📋 Log fail    : ${CYAN}$PI_DIR/idefender.log${NC}"
 echo -e "🔧 Konfigurasi : ${CYAN}$PI_DIR/config.env${NC}"
 echo ""
 echo -e "${YELLOW}Arahan berguna:${NC}"

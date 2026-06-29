@@ -24,7 +24,7 @@ export default function HomeScreen() {
     <ScrollView style={styles.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
       <View style={styles.header}>
         <Ionicons name="shield-checkmark" size={28} color="#3b82f6" />
-        <Text style={styles.headerTitle}>ParkingGuard</Text>
+        <Text style={styles.headerTitle}>I Defender</Text>
       </View>
 
       {stats && (

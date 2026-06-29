@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ParkingGuard — Raspberry Pi 4 Main Service
+I Defender — Raspberry Pi 4 Main Service
 Jalankan Flask API (untuk terima arahan GPIO dari backend)
 + Camera capture loop (hantar frame ke backend AI)
 """
@@ -19,7 +19,7 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler("/home/pi/parking-guard/parkingguard.log", mode="a"),
+        logging.FileHandler("/home/pi/parking-guard/idefender.log", mode="a"),
     ],
 )
 logger = logging.getLogger("main")
@@ -30,7 +30,7 @@ CAPTURE_INTERVAL  = float(os.getenv("CAPTURE_INTERVAL", "2.0"))
 FLASK_PORT        = int(os.getenv("FLASK_PORT", "5000"))
 
 logger.info("=" * 50)
-logger.info("  ParkingGuard Pi Service")
+logger.info("  I Defender Pi Service")
 logger.info(f"  Backend : {BACKEND_URL}")
 logger.info(f"  Zon     : {ZONE}")
 logger.info(f"  Interval: {CAPTURE_INTERVAL}s")
@@ -88,7 +88,7 @@ def restart_camera():
 
 # ── Pengendalian signal ────────────────────────────────────────
 def shutdown(sig, frame):
-    logger.info("Mematikan ParkingGuard Pi Service...")
+    logger.info("Mematikan I Defender Pi Service...")
     camera.stop()
     gpio.cleanup()
     sys.exit(0)

@@ -8,7 +8,7 @@
 TAJUK PROJEK:
 SISTEM PENGAWASAN KENDERAAN DAN PENGENALAN MUKA BERASASKAN AI
 MENGGUNAKAN RASPBERRY PI 4 DAN KAMERA PI V3
-(ParkingGuard Intelligent Vehicle Surveillance System)
+(I Defender Intelligent Vehicle Surveillance System)
 
 NAMA PELAJAR     : _______________________________
 NO. MATRIK       : _______________________________
@@ -44,7 +44,7 @@ Tarikh                : _______________
 
 ## ABSTRAK
 
-Projek ini membangunkan sistem pengawasan kenderaan pintar bernama **ParkingGuard** yang menggunakan Raspberry Pi 4 (8GB RAM) bersama Pi Camera V3 untuk memantau kawasan letak kereta di hadapan rumah. Sistem ini mampu mengenal pasti nombor plat kenderaan secara automatik menggunakan teknik *Automatic License Plate Recognition* (ALPR) yang dipacu oleh model kecerdasan buatan YOLOv8 dan EasyOCR. Kenderaan yang mempunyai nombor plat dalam senarai putih (*whitelist*) akan dibenarkan tanpa sebarang amaran, manakala kenderaan yang tidak dikenali akan mencetuskan amaran melalui buzzer, LED merah berkelip, serta notifikasi WhatsApp secara masa nyata kepada tuan rumah.
+Projek ini membangunkan sistem pengawasan kenderaan pintar bernama **I Defender** yang menggunakan Raspberry Pi 4 (8GB RAM) bersama Pi Camera V3 untuk memantau kawasan letak kereta di hadapan rumah. Sistem ini mampu mengenal pasti nombor plat kenderaan secara automatik menggunakan teknik *Automatic License Plate Recognition* (ALPR) yang dipacu oleh model kecerdasan buatan YOLOv8 dan EasyOCR. Kenderaan yang mempunyai nombor plat dalam senarai putih (*whitelist*) akan dibenarkan tanpa sebarang amaran, manakala kenderaan yang tidak dikenali akan mencetuskan amaran melalui buzzer, LED merah berkelip, serta notifikasi WhatsApp secara masa nyata kepada tuan rumah.
 
 Sebagai lapisan perlindungan kedua, sistem turut dilengkapi pengenalan muka menggunakan pustaka *face_recognition* berasaskan dlib. Sekiranya tuan rumah pulang menggunakan kenderaan yang tidak dalam senarai putih, sistem akan mengenal muka dan membatalkan amaran. Sistem ini turut mengenal pasti warna dan jenis kenderaan melalui model YOLOv8.
 
@@ -54,7 +54,7 @@ Antara muka pengguna disediakan melalui dua platform: (1) **Papan Pemuka Web** m
 
 ## ABSTRACT
 
-This project develops an intelligent vehicle surveillance system called **ParkingGuard** using a Raspberry Pi 4 (8GB RAM) with Pi Camera V3 to monitor a residential driveway. The system performs automatic license plate recognition (ALPR) using YOLOv8 and EasyOCR AI models. Whitelisted vehicles pass without alerts, while unknown vehicles trigger buzzers, flashing red LEDs, and real-time WhatsApp notifications. A secondary face recognition layer using dlib allows the homeowner to bypass alerts when recognized. The system includes a React.js web dashboard and React Native mobile app for whitelist management, face enrollment, image analysis, and real-time event monitoring.
+This project develops an intelligent vehicle surveillance system called **I Defender** using a Raspberry Pi 4 (8GB RAM) with Pi Camera V3 to monitor a residential driveway. The system performs automatic license plate recognition (ALPR) using YOLOv8 and EasyOCR AI models. Whitelisted vehicles pass without alerts, while unknown vehicles trigger buzzers, flashing red LEDs, and real-time WhatsApp notifications. A secondary face recognition layer using dlib allows the homeowner to bypass alerts when recognized. The system includes a React.js web dashboard and React Native mobile app for whitelist management, face enrollment, image analysis, and real-time event monitoring.
 
 ---
 
@@ -285,7 +285,7 @@ TAMAT
 
 ### 4.1 Seni Bina Sistem
 
-Sistem ParkingGuard dibahagikan kepada 3 lapisan utama:
+Sistem I Defender dibahagikan kepada 3 lapisan utama:
 
 **Lapisan 1 - Edge (Raspberry Pi)**
 - Pi Camera V3 untuk tangkapan imej
@@ -592,7 +592,7 @@ RAM 8GB Raspberry Pi 4 terbukti mencukupi untuk menjalankan semua model AI seren
 
 ### 7.1 Kesimpulan
 
-Projek ParkingGuard telah berjaya dibangunkan dan mencapai semua objektif yang telah ditetapkan:
+Projek I Defender telah berjaya dibangunkan dan mencapai semua objektif yang telah ditetapkan:
 
 ✅ Sistem pengenalan nombor plat automatik dengan kadar kejayaan 82.5%  
 ✅ Pengenalan warna dan jenis kenderaan yang berfungsi  

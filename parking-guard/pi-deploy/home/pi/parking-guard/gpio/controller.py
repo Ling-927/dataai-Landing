@@ -1,5 +1,5 @@
 """
-GPIO controller untuk Raspberry Pi 4 - ParkingGuard
+GPIO controller untuk Raspberry Pi 4 - I Defender
 Buzzer  → GPIO 18 (BCM) via transistor BC547
 LED Merah → GPIO 23 (BCM) via 220Ω
 LED Hijau → GPIO 24 (BCM) via 220Ω

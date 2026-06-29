@@ -65,5 +65,5 @@ if __name__ == "__main__":
 
     gpio.set_ready()
     camera.start()
-    logger.info(f"ParkingGuard Pi running. Backend: {BACKEND_URL}")
+    logger.info(f"I Defender Pi running. Backend: {BACKEND_URL}")
     app.run(host="0.0.0.0", port=5000, threaded=True)

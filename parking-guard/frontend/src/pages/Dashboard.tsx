@@ -25,7 +25,7 @@ export default function Dashboard() {
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard ParkingGuard</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Dashboard I Defender</h1>
         <div className="flex items-center gap-2 text-sm">
           {connected ? <><Wifi size={16} className="text-green-500" /> <span className="text-green-600">Live</span></> : <><WifiOff size={16} className="text-red-500" /><span className="text-red-500">Offline</span></>}
         </div>

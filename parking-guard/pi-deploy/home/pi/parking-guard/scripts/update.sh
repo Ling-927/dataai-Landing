@@ -1,11 +1,11 @@
 #!/bin/bash
-# Kemaskini fail ParkingGuard daripada server atau USB
+# Kemaskini fail I Defender daripada server atau USB
 # Jalankan: bash update.sh
 
 PI_DIR="/home/pi/parking-guard"
 VENV="  /home/pi/pg-venv"
 
-echo "=== ParkingGuard Update ==="
+echo "=== I Defender Update ==="
 
 # Semak sama ada ada fail baharu dalam USB
 USB_MOUNT="/media/pi"

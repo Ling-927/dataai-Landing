@@ -33,13 +33,13 @@ async def lifespan(app: FastAPI):
     notifier = NotificationService()
     db = SessionLocal()
     detection_service = DetectionService(db=db, ai=ai_service, notifier=notifier)
-    logger.info("ParkingGuard backend started")
+    logger.info("I Defender backend started")
     yield
     db.close()
 
 
 app = FastAPI(
-    title="ParkingGuard API",
+    title="I Defender API",
     version=settings.APP_VERSION,
     description="Sistem Pengawasan Kenderaan & Pengenalan Muka",
     lifespan=lifespan,
@@ -65,7 +65,7 @@ app.mount("/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads"
 
 @app.get("/")
 def root():
-    return {"service": "ParkingGuard API", "version": settings.APP_VERSION, "status": "running"}
+    return {"service": "I Defender API", "version": settings.APP_VERSION, "status": "running"}
 
 
 @app.get("/health")

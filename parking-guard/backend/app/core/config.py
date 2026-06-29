@@ -3,14 +3,14 @@ from typing import Optional
 
 
 class Settings(BaseSettings):
-    APP_NAME: str = "ParkingGuard"
+    APP_NAME: str = "I Defender"
     APP_VERSION: str = "1.0.0"
     SECRET_KEY: str = "change-this-secret"
     DEBUG: bool = False
     HOST: str = "0.0.0.0"
     PORT: int = 8000
 
-    DATABASE_URL: str = "sqlite:///./parking_guard.db"
+    DATABASE_URL: str = "sqlite:///./i_defender.db"
     REDIS_URL: str = "redis://localhost:6379"
 
     TWILIO_ACCOUNT_SID: Optional[str] = None

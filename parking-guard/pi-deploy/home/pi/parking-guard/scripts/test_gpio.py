@@ -8,7 +8,7 @@ import time
 sys.path.insert(0, "/home/pi/parking-guard")
 from gpio.controller import GPIOController
 
-print("=== Ujian GPIO ParkingGuard ===\n")
+print("=== Ujian GPIO I Defender ===\n")
 
 g = GPIOController()
 

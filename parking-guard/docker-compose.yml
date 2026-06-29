@@ -3,13 +3,13 @@ version: "3.9"
 services:
   backend:
     build: ./backend
-    container_name: parking-guard-api
+    container_name: i-defender-api
     ports:
       - "8000:8000"
     volumes:
       - ./backend/uploads:/app/uploads
       - ./ai-models:/app/ai-models
-      - ./backend/parking_guard.db:/app/parking_guard.db
+      - ./backend/i_defender.db:/app/i_defender.db
     env_file: ./backend/.env
     restart: unless-stopped
     healthcheck:
@@ -20,7 +20,7 @@ services:
 
   frontend:
     build: ./frontend
-    container_name: parking-guard-web
+    container_name: i-defender-web
     ports:
       - "3000:80"
     depends_on:
@@ -29,7 +29,7 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: parking-guard-redis
+    container_name: i-defender-redis
     restart: unless-stopped
     ports:
       - "6379:6379"

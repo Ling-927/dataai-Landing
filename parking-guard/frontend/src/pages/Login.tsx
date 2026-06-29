@@ -29,7 +29,7 @@ export default function Login() {
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-sm">
         <div className="text-center mb-8">
           <ShieldCheck size={48} className="mx-auto text-blue-600 mb-3" />
-          <h1 className="text-2xl font-bold text-gray-900">ParkingGuard</h1>
+          <h1 className="text-2xl font-bold text-gray-900">I Defender</h1>
           <p className="text-gray-500 text-sm mt-1">Sistem Pengawasan Kenderaan</p>
         </div>
         <form onSubmit={onSubmit} className="space-y-4">

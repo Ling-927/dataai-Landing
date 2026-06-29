@@ -3,7 +3,7 @@
 # Jalankan dari folder parking-guard/: bash pi-deploy/make_package.sh
 
 set -e
-OUT="parkingguard-pi-deploy.zip"
+OUT="idefender-pi-deploy.zip"
 rm -f "$OUT"
 
 cd pi-deploy

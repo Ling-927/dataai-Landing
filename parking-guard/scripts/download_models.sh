@@ -1,5 +1,5 @@
 #!/bin/bash
-# Download AI models for ParkingGuard
+# Download AI models for I Defender
 set -e
 
 mkdir -p ai-models

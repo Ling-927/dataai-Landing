@@ -1,8 +1,8 @@
 #!/bin/bash
-# Setup script for Raspberry Pi 4 - ParkingGuard
+# Setup script for Raspberry Pi 4 - I Defender
 set -e
 
-echo "=== ParkingGuard Pi Setup ==="
+echo "=== I Defender Pi Setup ==="
 
 # Update system
 sudo apt-get update && sudo apt-get upgrade -y
@@ -18,25 +18,25 @@ sudo raspi-config nonint do_camera 0
 
 # Create venv
 cd /home/pi
-python3 -m venv parking-guard-env
-source parking-guard-env/bin/activate
+python3 -m venv idefender-env
+source idefender-env/bin/activate
 
 # Install Python deps
 pip install --upgrade pip
-pip install -r /home/pi/parking-guard/raspberry-pi/requirements-pi.txt
+pip install -r /home/pi/idefender/raspberry-pi/requirements-pi.txt
 
 # Create systemd service
-cat > /tmp/parking-guard.service << 'EOF'
+cat > /tmp/idefender.service << 'EOF'
 [Unit]
-Description=ParkingGuard Pi Service
+Description=I Defender Pi Service
 After=network.target
 
 [Service]
 Type=simple
 User=pi
-WorkingDirectory=/home/pi/parking-guard/raspberry-pi
-Environment="PATH=/home/pi/parking-guard-env/bin"
-ExecStart=/home/pi/parking-guard-env/bin/python main.py
+WorkingDirectory=/home/pi/idefender/raspberry-pi
+Environment="PATH=/home/pi/idefender-env/bin"
+ExecStart=/home/pi/idefender-env/bin/python main.py
 Restart=always
 RestartSec=5
 
@@ -44,10 +44,10 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 
-sudo cp /tmp/parking-guard.service /etc/systemd/system/
+sudo cp /tmp/idefender.service /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable parking-guard
-sudo systemctl start parking-guard
+sudo systemctl enable idefender
+sudo systemctl start idefender
 
 echo "=== Setup selesai! ==="
 echo "Semak status: sudo systemctl status parking-guard"

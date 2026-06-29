@@ -20,7 +20,7 @@ export default function Layout() {
         <div className="p-5 border-b border-slate-700 flex items-center gap-3">
           <ShieldCheck size={24} className="text-blue-400" />
           <div>
-            <div className="font-bold">ParkingGuard</div>
+            <div className="font-bold">I Defender</div>
             <div className="text-xs text-slate-400">v1.0.0</div>
           </div>
         </div>

@@ -75,7 +75,7 @@ class NotificationService:
             return False
         try:
             body = (
-                f"✅ *ParkingGuard — Muka Dikenali*\n\n"
+                f"✅ *I Defender — Muka Dikenali*\n\n"
                 f"Plat *{plate_number}* bukan dalam senarai putih,\n"
                 f"tetapi muka *{owner_name}* telah dikenali.\n"
                 f"Tiada amaran dikeluarkan."

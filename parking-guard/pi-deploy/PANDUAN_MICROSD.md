@@ -269,7 +269,7 @@ CAPTURE_INTERVAL=2.0                     # Selang (saat)
 journalctl -u parking-guard -f
 
 # Log fail
-tail -f /home/pi/parking-guard/parkingguard.log
+tail -f /home/pi/parking-guard/idefender.log
 ```
 
 ### Arahan berguna
@@ -318,5 +318,5 @@ python3 /home/pi/parking-guard/scripts/test_backend.py
 
 ---
 
-*ParkingGuard v1.0 — Sistem Pengawasan Kenderaan Pintar*
+*I Defender v1.0 — Sistem Pengawasan Kenderaan Pintar*
 *Raspberry Pi 4 8GB + Pi Camera V3 + Buzzer + LED*

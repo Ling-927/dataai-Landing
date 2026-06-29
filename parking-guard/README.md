@@ -1,4 +1,4 @@
-# ParkingGuard — Sistem Pengawasan Kenderaan Pintar
+# I Defender — Sistem Pengawasan Kenderaan Pintar
 
 Sistem keselamatan kenderaan berasaskan AI menggunakan Raspberry Pi 4 + Pi Camera V3.
 
@@ -17,7 +17,7 @@ Sistem keselamatan kenderaan berasaskan AI menggunakan Raspberry Pi 4 + Pi Camer
 ## Struktur Projek
 
 ```
-parking-guard/
+i-defender/
 ├── raspberry-pi/      # Kod Pi (kamera + GPIO)
 ├── backend/           # FastAPI server + AI pipeline
 ├── frontend/          # React.js web dashboard
